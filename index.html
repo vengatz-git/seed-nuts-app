@@ -1,0 +1,3306 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terra Natura — Artisan Seeds, Nuts & Superfoods</title>
+
+  <!-- Tailwind CSS Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Playfair Display + Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- GSAP & ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <!-- EmailJS SDK (for direct real email delivery without backend) -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            forest: {
+              950: '#0a1710',
+              900: '#11251b',
+              800: '#1a3a2a',
+              700: '#234e38',
+              600: '#2d5a3d',
+              500: '#3c7953',
+              400: '#4e996b',
+              300: '#75b58d',
+              100: '#dceee2',
+              50: '#f0f7f3',
+            },
+            earth: {
+              900: '#523d0c',
+              800: '#8b6914',
+              700: '#aa811a',
+              600: '#c4a265',
+              500: '#d4b77f',
+              400: '#e3ce9e',
+              300: '#ede0bf',
+              100: '#f7f2e4',
+              50: '#fbf9f4',
+            },
+            cream: {
+              50: '#fdfbf7',
+              100: '#faf7f2',
+              200: '#f5efe6',
+              300: '#ede3d5',
+              400: '#ded0be',
+            }
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          boxShadow: {
+            'glass': '0 8px 32px 0 rgba(17, 37, 27, 0.08)',
+            'glass-lg': '0 20px 48px -10px rgba(17, 37, 27, 0.16)',
+            'glass-dark': '0 16px 40px -10px rgba(0, 0, 0, 0.35)',
+            'glow-gold': '0 0 25px rgba(196, 162, 101, 0.35)',
+            'glow-forest': '0 0 25px rgba(45, 90, 61, 0.4)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #faf7f2;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2d5a3d;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #1a3a2a;
+    }
+
+    /* Glassmorphism Classes */
+    .glass-light {
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+    .glass-cream {
+      background: rgba(250, 247, 242, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(196, 162, 101, 0.22);
+    }
+    .glass-dark {
+      background: rgba(17, 37, 27, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(196, 162, 101, 0.28);
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(226, 215, 195, 0.6);
+      transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .glass-card:hover {
+      transform: translateY(-8px) scale(1.015);
+      box-shadow: 0 24px 50px -12px rgba(26, 58, 42, 0.18);
+      border-color: rgba(196, 162, 101, 0.6);
+    }
+
+    /* Floating Botanical Keyframes */
+    @keyframes floatSlow {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg) scale(1);
+      }
+      50% {
+        transform: translateY(-24px) rotate(7deg) scale(1.04);
+      }
+    }
+    @keyframes floatMedium {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg) scale(1);
+      }
+      50% {
+        transform: translateY(-38px) rotate(-9deg) scale(1.06);
+      }
+    }
+    @keyframes floatSway {
+      0%, 100% {
+        transform: translate(0px, 0px) rotate(0deg);
+      }
+      33% {
+        transform: translate(14px, -20px) rotate(5deg);
+      }
+      66% {
+        transform: translate(-12px, -32px) rotate(-6deg);
+      }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.45; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.08); }
+    }
+    @keyframes checkDraw {
+      0% { stroke-dashoffset: 48; }
+      100% { stroke-dashoffset: 0; }
+    }
+
+    .animate-float-slow {
+      animation: floatSlow 7s ease-in-out infinite;
+    }
+    .animate-float-medium {
+      animation: floatMedium 5.5s ease-in-out infinite;
+    }
+    .animate-float-sway {
+      animation: floatSway 9s ease-in-out infinite;
+    }
+    .animate-pulse-glow {
+      animation: pulseGlow 4s ease-in-out infinite;
+    }
+    .check-animation {
+      stroke-dasharray: 48;
+      stroke-dashoffset: 48;
+      animation: checkDraw 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards 0.2s;
+    }
+
+    /* Particle Burst Styling */
+    .particle {
+      position: absolute;
+      pointer-events: none;
+      border-radius: 50%;
+      z-index: 9999;
+    }
+
+    /* Modal Transitions */
+    .modal-backdrop {
+      transition: opacity 0.3s ease-out;
+    }
+    .modal-content {
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease-out;
+    }
+
+    /* Selection Highlight */
+    ::selection {
+      background: #c4a265;
+      color: #11251b;
+    }
+  </style>
+</head>
+
+<body class="bg-cream-100 text-forest-900 font-sans antialiased overflow-x-hidden selection:bg-earth-600 selection:text-white">
+
+  <!-- ========================================================
+       SECTION 2: FLOATING BOTANICAL ELEMENTS (Global Ambient)
+       ======================================================== -->
+  <div id="botanical-ambient" class="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
+    <!-- Botanical silhouettes and ambient glow spheres -->
+    <div class="parallax-seed absolute top-12 left-[8%] w-16 h-16 opacity-30 text-forest-700 animate-float-slow">
+      <svg viewBox="0 0 100 100" fill="currentColor">
+        <path d="M50 5 C25 25 15 55 35 80 C50 95 65 95 75 80 C95 55 75 25 50 5 Z"/>
+      </svg>
+    </div>
+    <div class="parallax-seed absolute top-1/4 right-[6%] w-24 h-24 opacity-25 text-earth-600 animate-float-medium">
+      <svg viewBox="0 0 100 100" fill="currentColor">
+        <path d="M50 0 C20 30 10 70 50 100 C90 70 80 30 50 0 Z M50 20 L50 80"/>
+      </svg>
+    </div>
+    <div class="parallax-seed absolute top-[60%] left-[4%] w-20 h-20 opacity-20 text-forest-600 animate-float-sway">
+      <svg viewBox="0 0 100 100" fill="currentColor">
+        <ellipse cx="50" cy="50" rx="30" ry="45" transform="rotate(30 50 50)"/>
+      </svg>
+    </div>
+    <div class="parallax-seed absolute bottom-[15%] right-[9%] w-28 h-28 opacity-25 text-earth-500 animate-float-slow">
+      <svg viewBox="0 0 100 100" fill="currentColor">
+        <path d="M50 10 C30 30 20 60 40 85 C55 98 70 95 80 82 C98 58 75 25 50 10 Z"/>
+      </svg>
+    </div>
+    <!-- Soft glowing atmospheric patches -->
+    <div class="absolute -top-32 left-1/3 w-96 h-96 bg-forest-400/10 rounded-full blur-3xl animate-pulse-glow"></div>
+    <div class="absolute top-[45%] -right-20 w-80 h-80 bg-earth-500/15 rounded-full blur-3xl animate-pulse-glow" style="animation-delay: -2s;"></div>
+    <div class="absolute bottom-10 left-10 w-96 h-96 bg-forest-500/10 rounded-full blur-3xl animate-pulse-glow" style="animation-delay: -1s;"></div>
+  </div>
+
+
+  <!-- ========================================================
+       SECTION 1: FIXED NAVIGATION BAR
+       ======================================================== -->
+  <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 px-4 sm:px-8">
+    <div class="max-w-7xl mx-auto glass-cream rounded-2xl shadow-glass px-6 py-3.5 flex items-center justify-between border border-earth-600/20">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-3.5 group">
+        <div class="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-forest-800 via-forest-900 to-forest-950 p-[1.5px] shadow-lg shadow-forest-900/20 transition-all duration-300 group-hover:shadow-glow-gold group-hover:scale-105">
+          <div class="w-full h-full rounded-[14px] bg-forest-900 flex items-center justify-center overflow-hidden relative">
+            <svg class="w-7 h-7 transition-transform duration-500 group-hover:rotate-6" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="navLeafGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#f5efe6"/>
+                  <stop offset="50%" stop-color="#c4a265"/>
+                  <stop offset="100%" stop-color="#8b6914"/>
+                </linearGradient>
+                <linearGradient id="navLeafGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#75b58d"/>
+                  <stop offset="100%" stop-color="#2d5a3d"/>
+                </linearGradient>
+              </defs>
+              <!-- Sacred Botanical Seed & Sprout Logo Emblazon -->
+              <circle cx="32" cy="32" r="28" stroke="url(#navLeafGold)" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.6"/>
+              <!-- Organic Golden Seed Outer Husk -->
+              <path d="M32 10 C46 22 47 44 32 54 C17 44 18 22 32 10 Z" fill="url(#navLeafGreen)" opacity="0.45"/>
+              <!-- Inner Golden Sprout & Seed Heart -->
+              <path d="M32 15 C41 26 42 42 32 49 C22 42 23 26 32 15 Z" fill="url(#navLeafGold)"/>
+              <!-- Central Life Vein -->
+              <path d="M32 18 L32 46" stroke="#0a1710" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M32 28 C36 25 39 26 40 28" stroke="#0a1710" stroke-width="1.2" stroke-linecap="round"/>
+              <path d="M32 34 C28 31 25 32 24 34" stroke="#0a1710" stroke-width="1.2" stroke-linecap="round"/>
+              <!-- Sparkle Star of Origin -->
+              <circle cx="32" cy="13" r="2" fill="#faf7f2"/>
+            </svg>
+          </div>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-serif text-xl sm:text-2xl font-bold tracking-tight text-forest-900 group-hover:text-forest-700 transition-colors flex items-center gap-1">
+            Terra Natura
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-earth-500"></span>
+          </span>
+          <span class="text-[9px] uppercase tracking-widest text-earth-800 font-semibold -mt-0.5">
+            Artisan Botanicals &bull; Nilgiri Estate
+          </span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-forest-800">
+        <a href="#products" class="hover:text-earth-800 transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-earth-600 hover:after:w-full after:transition-all">Products</a>
+        <a href="#box-builder" class="hover:text-earth-800 transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-earth-600 hover:after:w-full after:transition-all">Build Custom Box</a>
+        <a href="#health-index" class="hover:text-earth-800 transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-earth-600 hover:after:w-full after:transition-all">Health Index</a>
+        <a href="#reviews" class="hover:text-earth-800 transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-earth-600 hover:after:w-full after:transition-all">Customer Reviews</a>
+        <a href="#contact" class="hover:text-earth-800 transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-earth-600 hover:after:w-full after:transition-all">Contact</a>
+      </nav>
+
+      <!-- Cart Button & Mobile Menu Toggle -->
+      <div class="flex items-center gap-3">
+        <button id="cart-btn" onclick="openCartDrawer()" class="relative flex items-center gap-2.5 px-4 py-2 rounded-xl bg-forest-800 hover:bg-forest-900 text-cream-100 transition-all duration-300 shadow-md hover:shadow-lg active:scale-95 group">
+          <i data-lucide="shopping-bag" class="w-4 h-4 text-earth-300 group-hover:scale-110 transition-transform"></i>
+          <span class="hidden sm:inline text-xs font-semibold uppercase tracking-wider">Cart</span>
+          <span id="nav-cart-badge" class="min-w-[20px] h-5 px-1.5 rounded-full bg-earth-500 text-forest-950 text-xs font-bold flex items-center justify-center transition-transform scale-100">
+            0
+          </span>
+        </button>
+
+        <button id="mobile-menu-btn" onclick="toggleMobileNav()" class="md:hidden p-2 text-forest-800 hover:text-forest-900 rounded-lg hover:bg-forest-100/60" aria-label="Toggle Navigation">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Navigation -->
+    <div id="mobile-nav" class="hidden md:hidden mt-2 max-w-7xl mx-auto glass-cream rounded-2xl shadow-lg border border-earth-600/20 px-6 py-4 flex flex-col gap-3 font-medium text-forest-900 text-sm">
+      <a href="#products" onclick="toggleMobileNav()" class="py-2 hover:text-earth-800 border-b border-earth-600/10 flex items-center justify-between">
+        <span>Our Products</span>
+        <i data-lucide="chevron-right" class="w-4 h-4 text-earth-700"></i>
+      </a>
+      <a href="#box-builder" onclick="toggleMobileNav()" class="py-2 hover:text-earth-800 border-b border-earth-600/10 flex items-center justify-between">
+        <span>Build Custom Snack Box</span>
+        <i data-lucide="gift" class="w-4 h-4 text-earth-700"></i>
+      </a>
+      <a href="#health-index" onclick="toggleMobileNav()" class="py-2 hover:text-earth-800 border-b border-earth-600/10 flex items-center justify-between">
+        <span>Health &amp; Crunch Index</span>
+        <i data-lucide="activity" class="w-4 h-4 text-earth-700"></i>
+      </a>
+      <a href="#reviews" onclick="toggleMobileNav()" class="py-2 hover:text-earth-800 border-b border-earth-600/10 flex items-center justify-between">
+        <span>Customer Reviews</span>
+        <i data-lucide="star" class="w-4 h-4 text-earth-700"></i>
+      </a>
+      <a href="#contact" onclick="toggleMobileNav()" class="py-2 hover:text-earth-800 flex items-center justify-between">
+        <span>Contact &amp; Concierge</span>
+        <i data-lucide="mail" class="w-4 h-4 text-earth-700"></i>
+      </a>
+    </div>
+  </header>
+
+
+  <!-- ========================================================
+       SECTION 3: HERO SECTION
+       ======================================================== -->
+  <section id="hero" class="relative min-h-screen pt-28 pb-20 flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#11251b] via-[#1a3a2a] to-[#244733] text-cream-100">
+    
+    <!-- Hero Background Textured Lighting -->
+    <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#c4a265_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
+    <div class="absolute top-1/4 -left-20 w-96 h-96 bg-earth-500/20 rounded-full blur-[100px] pointer-events-none"></div>
+    <div class="absolute bottom-10 -right-20 w-[30rem] h-[30rem] bg-forest-400/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      
+      <!-- Hero Copy Column (7 cols) -->
+      <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+        
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-forest-700/60 border border-earth-500/30 text-earth-300 text-xs font-semibold tracking-wider uppercase backdrop-blur-md">
+          <i data-lucide="award" class="w-3.5 h-3.5 text-earth-400"></i>
+          <span>100% Certified Organic • Artisan Harvested</span>
+        </div>
+
+        <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] text-cream-50 tracking-tight">
+          Nature's Finest Fuel — <br/>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-earth-300 via-earth-400 to-earth-200 italic font-serif">
+            Harvested with Purpose.
+          </span>
+        </h1>
+
+        <p class="text-cream-200/90 text-base sm:text-lg md:text-xl font-light max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+          Pristine raw seeds, activated sun-drenched nuts, and organic dried fruits sourced directly from single-estate regenerative farms. Unadulterated crunch, maximum bioavailability, and unmatched pure vitality.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+          <a href="#products" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-earth-600 via-earth-500 to-earth-600 hover:from-earth-500 hover:to-earth-700 text-forest-950 font-bold text-sm tracking-wide uppercase transition-all duration-300 shadow-glow-gold hover:scale-105 active:scale-95 text-center flex items-center justify-center gap-2.5">
+            <span>Explore Products</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+          <a href="#box-builder" class="w-full sm:w-auto px-8 py-4 rounded-xl glass-dark hover:bg-forest-800/90 text-cream-100 font-semibold text-sm tracking-wide uppercase border border-earth-400/40 transition-all duration-300 hover:scale-105 active:scale-95 text-center flex items-center justify-center gap-2.5">
+            <i data-lucide="box" class="w-4 h-4 text-earth-300"></i>
+            <span>Build Your Custom Box</span>
+          </a>
+        </div>
+
+        <!-- Metric Badges -->
+        <div class="pt-8 grid grid-cols-3 gap-4 border-t border-forest-600/50 max-w-lg mx-auto lg:mx-0 text-center">
+          <div>
+            <div class="font-serif text-2xl sm:text-3xl font-bold text-earth-300">100%</div>
+            <div class="text-[11px] uppercase tracking-wider text-cream-300/80 font-medium">Single Origin</div>
+          </div>
+          <div>
+            <div class="font-serif text-2xl sm:text-3xl font-bold text-earth-300">Zero</div>
+            <div class="text-[11px] uppercase tracking-wider text-cream-300/80 font-medium">Added Refined Sugars</div>
+          </div>
+          <div>
+            <div class="font-serif text-2xl sm:text-3xl font-bold text-earth-300">4.9 ★</div>
+            <div class="text-[11px] uppercase tracking-wider text-cream-300/80 font-medium">10,000+ Happy Foodies</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Hero Visual Showcase Column (5 cols) -->
+      <div class="lg:col-span-5 relative flex justify-center items-center">
+        <!-- Floating Glass Showcase Centerpiece -->
+        <div class="relative w-80 h-96 sm:w-96 sm:h-[440px] rounded-3xl glass-dark p-6 flex flex-col justify-between shadow-glass-dark border border-earth-400/30">
+          
+          <!-- Top Badge -->
+          <div class="flex items-center justify-between border-b border-forest-600/50 pb-4">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-emerald-400 animate-ping"></span>
+              <span class="text-xs uppercase tracking-wider text-earth-300 font-semibold">Fresh Harvest 2026</span>
+            </div>
+            <span class="text-xs bg-forest-700/80 text-earth-200 px-2.5 py-1 rounded-full border border-earth-500/20">Hand Roasted</span>
+          </div>
+
+          <!-- Central Rotating Product Visual Badge -->
+          <div class="relative py-6 flex flex-col items-center justify-center text-center">
+            <div id="hero-interactive-emoji" class="text-8xl select-none filter drop-shadow-2xl transition-transform duration-500 hover:scale-125 cursor-pointer">
+              🌰
+            </div>
+            <h3 class="font-serif text-2xl font-bold text-cream-100 mt-4">Styrian &amp; Nonpareil</h3>
+            <p class="text-xs text-earth-300/90 font-medium mt-1">Artisan Roasted Almonds &amp; Seeds</p>
+          </div>
+
+          <!-- Bottom Card Floating Quick Specs -->
+          <div class="bg-forest-900/80 rounded-2xl p-4 border border-earth-500/20 backdrop-blur-md">
+            <div class="flex justify-between items-center text-xs text-cream-200">
+              <span class="flex items-center gap-1.5">
+                <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i> High Protein
+              </span>
+              <span class="flex items-center gap-1.5">
+                <i data-lucide="heart" class="w-3.5 h-3.5 text-rose-400"></i> Heart Healthy
+              </span>
+              <span class="flex items-center gap-1.5">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i> Pure Raw
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating Micro Glass Card 1 -->
+        <div class="absolute -top-6 -left-6 sm:-left-10 glass-light rounded-2xl p-3.5 shadow-glass-lg flex items-center gap-3 text-forest-950 animate-float-medium hidden sm:flex border border-white/60">
+          <div class="text-3xl">🎃</div>
+          <div>
+            <div class="text-xs font-bold font-serif leading-tight">Pumpkin Seeds</div>
+            <div class="text-[10px] text-forest-700 font-semibold">Zinc &amp; Magnesium Rich</div>
+          </div>
+        </div>
+
+        <!-- Floating Micro Glass Card 2 -->
+        <div class="absolute -bottom-8 -right-6 sm:-right-8 glass-light rounded-2xl p-3.5 shadow-glass-lg flex items-center gap-3 text-forest-950 animate-float-slow hidden sm:flex border border-white/60">
+          <div class="text-3xl">🍒</div>
+          <div>
+            <div class="text-xs font-bold font-serif leading-tight">Ruby Cranberries</div>
+            <div class="text-[10px] text-forest-700 font-semibold">100% Apple Infused</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bottom Curved Wave Accent -->
+    <div class="absolute bottom-0 left-0 right-0 h-10 bg-cream-100 rounded-t-[2.5rem] pointer-events-none"></div>
+  </section>
+
+
+  <!-- ========================================================
+       FEATURE STRIP: ETHICAL HARVEST PILLARS
+       ======================================================== -->
+  <section class="relative z-10 -mt-2 bg-cream-100 py-6 border-b border-earth-600/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center md:text-left">
+        <div class="flex items-center gap-3.5 justify-center md:justify-start">
+          <div class="w-10 h-10 rounded-xl bg-forest-100 text-forest-800 flex items-center justify-center shrink-0">
+            <i data-lucide="leaf" class="w-5 h-5 text-forest-600"></i>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-forest-900 uppercase tracking-wide">100% Certified Organic</div>
+            <div class="text-[11px] text-forest-700/80">No chemicals, zero synthetic sprays</div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3.5 justify-center md:justify-start">
+          <div class="w-10 h-10 rounded-xl bg-earth-100 text-earth-800 flex items-center justify-center shrink-0">
+            <i data-lucide="flame" class="w-5 h-5 text-earth-700"></i>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-forest-900 uppercase tracking-wide">Slow Dry-Roasted</div>
+            <div class="text-[11px] text-forest-700/80">Never fried, no palm or vegetable oils</div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3.5 justify-center md:justify-start">
+          <div class="w-10 h-10 rounded-xl bg-forest-100 text-forest-800 flex items-center justify-center shrink-0">
+            <i data-lucide="package-check" class="w-5 h-5 text-forest-600"></i>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-forest-900 uppercase tracking-wide">Nitrogen Flushed</div>
+            <div class="text-[11px] text-forest-700/80">Airtight sensory peak freshness</div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3.5 justify-center md:justify-start">
+          <div class="w-10 h-10 rounded-xl bg-earth-100 text-earth-800 flex items-center justify-center shrink-0">
+            <i data-lucide="truck" class="w-5 h-5 text-earth-700"></i>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-forest-900 uppercase tracking-wide">Eco-Conscious Shipping</div>
+            <div class="text-[11px] text-forest-700/80">100% plastic-free compostable boxes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ========================================================
+       SECTION 9: HEALTH & CRUNCH INDEX SECTION
+       ======================================================== -->
+  <section id="health-index" class="py-24 bg-gradient-to-b from-cream-100 via-cream-50 to-cream-100 relative overflow-hidden border-y border-earth-600/15 scroll-mt-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-forest-100 text-forest-800 text-xs font-bold uppercase tracking-wider mb-3">
+          <i data-lucide="activity" class="w-3.5 h-3.5 text-forest-600"></i>
+          <span>Nutritional Intelligence</span>
+        </div>
+        <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-forest-950 tracking-tight">
+          Health &amp; Crunch Index
+        </h2>
+        <p class="text-forest-700/80 text-sm sm:text-base mt-3">
+          Filter by your physiological wellness target. Click any category card to highlight relevant artisanal harvest items in our catalog.
+        </p>
+      </div>
+
+      <!-- 5 Interactive Health Cards Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+        
+        <!-- 1: High Protein -->
+        <div onclick="filterByHealthTag('high-protein', 'High Protein')" class="health-card group cursor-pointer glass-card rounded-2xl p-5 border border-earth-600/20 hover:border-earth-600 transition-all flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <i data-lucide="dumbbell" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-serif font-bold text-lg text-forest-900">High Protein</h3>
+            <p class="text-xs text-forest-700/80 mt-1">Muscle repair, plant BCAAs &amp; athletic power.</p>
+          </div>
+          <div class="mt-6">
+            <div class="flex justify-between text-xs font-semibold text-forest-900 mb-1.5">
+              <span>Bio-Density Index</span>
+              <span class="text-emerald-700 font-bold">95 / 100</span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-cream-300 overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-emerald-500 to-emerald-700 rounded-full transition-all duration-1000 w-[95%]"></div>
+            </div>
+            <div class="text-[10px] text-earth-800 font-semibold mt-3 flex items-center justify-between">
+              <span>View 5 items</span>
+              <i data-lucide="arrow-right" class="w-3 h-3 group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2: Keto Friendly -->
+        <div onclick="filterByHealthTag('keto-friendly', 'Keto Friendly')" class="health-card group cursor-pointer glass-card rounded-2xl p-5 border border-earth-600/20 hover:border-earth-600 transition-all flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <i data-lucide="flame" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-serif font-bold text-lg text-forest-900">Keto Friendly</h3>
+            <p class="text-xs text-forest-700/80 mt-1">Ultra-low net carbs, pristine clean fats &amp; ketones.</p>
+          </div>
+          <div class="mt-6">
+            <div class="flex justify-between text-xs font-semibold text-forest-900 mb-1.5">
+              <span>Bio-Density Index</span>
+              <span class="text-amber-700 font-bold">92 / 100</span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-cream-300 overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-amber-500 to-amber-700 rounded-full transition-all duration-1000 w-[92%]"></div>
+            </div>
+            <div class="text-[10px] text-earth-800 font-semibold mt-3 flex items-center justify-between">
+              <span>View 4 items</span>
+              <i data-lucide="arrow-right" class="w-3 h-3 group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3: Heart Health -->
+        <div onclick="filterByHealthTag('heart-health', 'Heart Health')" class="health-card group cursor-pointer glass-card rounded-2xl p-5 border border-earth-600/20 hover:border-earth-600 transition-all flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-rose-100 text-rose-800 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <i data-lucide="heart" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-serif font-bold text-lg text-forest-900">Heart Health</h3>
+            <p class="text-xs text-forest-700/80 mt-1">Omega-3 ALA, arginine, and LDL balancing phytosterols.</p>
+          </div>
+          <div class="mt-6">
+            <div class="flex justify-between text-xs font-semibold text-forest-900 mb-1.5">
+              <span>Bio-Density Index</span>
+              <span class="text-rose-700 font-bold">98 / 100</span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-cream-300 overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-rose-500 to-rose-700 rounded-full transition-all duration-1000 w-[98%]"></div>
+            </div>
+            <div class="text-[10px] text-earth-800 font-semibold mt-3 flex items-center justify-between">
+              <span>View 5 items</span>
+              <i data-lucide="arrow-right" class="w-3 h-3 group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4: Superfood -->
+        <div onclick="filterByHealthTag('superfood', 'Superfood')" class="health-card group cursor-pointer glass-card rounded-2xl p-5 border border-earth-600/20 hover:border-earth-600 transition-all flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-800 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <i data-lucide="sparkles" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-serif font-bold text-lg text-forest-900">Superfood</h3>
+            <p class="text-xs text-forest-700/80 mt-1">Exceptional micronutrients, polyphenols &amp; minerals.</p>
+          </div>
+          <div class="mt-6">
+            <div class="flex justify-between text-xs font-semibold text-forest-900 mb-1.5">
+              <span>Bio-Density Index</span>
+              <span class="text-purple-700 font-bold">96 / 100</span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-cream-300 overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-purple-500 to-purple-700 rounded-full transition-all duration-1000 w-[96%]"></div>
+            </div>
+            <div class="text-[10px] text-earth-800 font-semibold mt-3 flex items-center justify-between">
+              <span>View 5 items</span>
+              <i data-lucide="arrow-right" class="w-3 h-3 group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5: Energy Boost -->
+        <div onclick="filterByHealthTag('energy-boost', 'Energy Boost')" class="health-card group cursor-pointer glass-card rounded-2xl p-5 border border-earth-600/20 hover:border-earth-600 transition-all flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <i data-lucide="zap" class="w-6 h-6 text-amber-600"></i>
+            </div>
+            <h3 class="font-serif font-bold text-lg text-forest-900">Energy Boost</h3>
+            <p class="text-xs text-forest-700/80 mt-1">Sustained mitochondrial ATP &amp; anti-fatigue complex.</p>
+          </div>
+          <div class="mt-6">
+            <div class="flex justify-between text-xs font-semibold text-forest-900 mb-1.5">
+              <span>Bio-Density Index</span>
+              <span class="text-amber-800 font-bold">94 / 100</span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-cream-300 overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-amber-500 to-amber-700 rounded-full transition-all duration-1000 w-[94%]"></div>
+            </div>
+            <div class="text-[10px] text-earth-800 font-semibold mt-3 flex items-center justify-between">
+              <span>View 5 items</span>
+              <i data-lucide="arrow-right" class="w-3 h-3 group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ========================================================
+       SECTION 4: PRODUCT CATALOG
+       ======================================================== -->
+  <section id="products" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-earth-100 text-earth-800 text-xs font-bold uppercase tracking-wider mb-2">
+          <i data-lucide="gem" class="w-3.5 h-3.5"></i>
+          <span>Single-Estate Provisions</span>
+        </div>
+        <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-forest-950 tracking-tight">
+          Our Artisan Collection
+        </h2>
+        <p class="text-forest-700/80 text-sm sm:text-base mt-2 max-w-xl">
+          Carefully graded, non-GMO, and packed in nitrogen-flushed UV glass containers to safeguard crunch and enzymatic potency.
+        </p>
+      </div>
+
+      <!-- Active Filter Reset / Notification Pill -->
+      <div id="filter-status-container" class="hidden items-center gap-2 bg-forest-800 text-earth-200 px-4 py-2 rounded-xl text-xs font-medium shadow-md">
+        <span>Filtered by: <strong id="filter-status-label" class="text-white"></strong></span>
+        <button onclick="resetFilters()" class="ml-2 hover:text-white underline text-[11px]">Clear Filter</button>
+      </div>
+    </div>
+
+    <!-- Category Filter Tabs -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-4 no-scrollbar mb-10 border-b border-earth-600/20">
+      <button onclick="setCategoryFilter('all')" data-cat="all" class="cat-filter-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold tracking-wide whitespace-nowrap transition-all duration-300 bg-forest-800 text-cream-50 shadow-md">
+        All Harvest (12)
+      </button>
+      <button onclick="setCategoryFilter('seeds')" data-cat="seeds" class="cat-filter-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold tracking-wide whitespace-nowrap transition-all duration-300 bg-cream-200 text-forest-800 hover:bg-forest-100">
+        Pure Seeds (3)
+      </button>
+      <button onclick="setCategoryFilter('nuts')" data-cat="nuts" class="cat-filter-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold tracking-wide whitespace-nowrap transition-all duration-300 bg-cream-200 text-forest-800 hover:bg-forest-100">
+        Crunchy Nuts (4)
+      </button>
+      <button onclick="setCategoryFilter('dry-fruits')" data-cat="dry-fruits" class="cat-filter-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold tracking-wide whitespace-nowrap transition-all duration-300 bg-cream-200 text-forest-800 hover:bg-forest-100">
+        Dried Fruits (3)
+      </button>
+      <button onclick="setCategoryFilter('combos')" data-cat="combos" class="cat-filter-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold tracking-wide whitespace-nowrap transition-all duration-300 bg-cream-200 text-forest-800 hover:bg-forest-100">
+        Curated Combos (2)
+      </button>
+    </div>
+
+    <!-- Products Responsive Grid -->
+    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
+      <!-- Generated Dynamically via JS -->
+    </div>
+
+  </section>
+
+
+  <!-- ========================================================
+       SECTION 6: BUILD YOUR OWN SNACK BOX
+       ======================================================== -->
+  <section id="box-builder" class="py-24 bg-gradient-to-b from-cream-100 via-forest-900 to-forest-950 text-cream-100 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-forest-800/80 border border-earth-400/30 text-earth-300 text-xs font-bold uppercase tracking-wider mb-3">
+          <i data-lucide="gift" class="w-3.5 h-3.5"></i>
+          <span>Artisan Tailoring</span>
+        </div>
+        <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-cream-50 tracking-tight">
+          Build Your Own Snack Box
+        </h2>
+        <p class="text-cream-200/80 text-sm sm:text-base mt-3">
+          Curate 3 to 5 premium ingredients into your custom personalized wooden gift box, packaged fresh with your chosen moniker.
+        </p>
+      </div>
+
+      <!-- Builder Container -->
+      <div class="glass-dark rounded-3xl p-6 sm:p-10 shadow-glass-dark border border-earth-500/25">
+        
+        <!-- Stepper Progress Bar -->
+        <div class="flex items-center justify-center max-w-md mx-auto mb-10">
+          <div class="flex items-center w-full">
+            <!-- Step 1 Indicator -->
+            <div class="flex flex-col items-center">
+              <div id="step-node-1" class="w-10 h-10 rounded-full bg-earth-500 text-forest-950 font-bold flex items-center justify-center text-sm shadow-glow-gold transition-colors">
+                1
+              </div>
+              <span class="text-[11px] font-semibold tracking-wider text-earth-300 uppercase mt-2">Box Name</span>
+            </div>
+            <div id="step-line-1" class="flex-1 h-1 bg-forest-700 mx-2 -mt-5 transition-colors"></div>
+
+            <!-- Step 2 Indicator -->
+            <div class="flex flex-col items-center">
+              <div id="step-node-2" class="w-10 h-10 rounded-full bg-forest-800 text-cream-300 font-bold flex items-center justify-center text-sm border border-forest-600 transition-colors">
+                2
+              </div>
+              <span class="text-[11px] font-semibold tracking-wider text-cream-300 uppercase mt-2">Ingredients</span>
+            </div>
+            <div id="step-line-2" class="flex-1 h-1 bg-forest-700 mx-2 -mt-5 transition-colors"></div>
+
+            <!-- Step 3 Indicator -->
+            <div class="flex flex-col items-center">
+              <div id="step-node-3" class="w-10 h-10 rounded-full bg-forest-800 text-cream-300 font-bold flex items-center justify-center text-sm border border-forest-600 transition-colors">
+                3
+              </div>
+              <span class="text-[11px] font-semibold tracking-wider text-cream-300 uppercase mt-2">Summary</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 1 CONTENT: Name Your Box -->
+        <div id="builder-step-1" class="builder-step max-w-xl mx-auto space-y-6 text-center">
+          <div class="space-y-2">
+            <h3 class="font-serif text-2xl font-bold text-cream-50">What would you like to christen your box?</h3>
+            <p class="text-xs text-cream-300/80">This custom name will be hand-embossed on the wooden artisan slide lid.</p>
+          </div>
+
+          <div class="relative">
+            <input 
+              type="text" 
+              id="box-custom-name" 
+              placeholder="e.g., Summit Energy Reserve, Peak Vitality Mix..." 
+              value="My Artisan Fuel Box"
+              class="w-full px-5 py-4 rounded-xl bg-forest-900/90 border border-earth-400/40 text-cream-100 placeholder-forest-400 focus:outline-none focus:border-earth-400 focus:ring-2 focus:ring-earth-400/20 text-center font-serif text-lg"
+            >
+          </div>
+
+          <!-- Suggested Quick Name Tags -->
+          <div class="flex flex-wrap gap-2 justify-center items-center text-xs">
+            <span class="text-cream-400 text-[11px]">Quick ideas:</span>
+            <button onclick="setBoxNameSuggestion('Peak Vitality Pack')" class="px-3 py-1 rounded-full bg-forest-800 hover:bg-forest-700 text-earth-300 border border-forest-600 transition-colors">Peak Vitality Pack</button>
+            <button onclick="setBoxNameSuggestion('Midnight Study Fuel')" class="px-3 py-1 rounded-full bg-forest-800 hover:bg-forest-700 text-earth-300 border border-forest-600 transition-colors">Midnight Study Fuel</button>
+            <button onclick="setBoxNameSuggestion('Keto Warrior Blend')" class="px-3 py-1 rounded-full bg-forest-800 hover:bg-forest-700 text-earth-300 border border-forest-600 transition-colors">Keto Warrior Blend</button>
+          </div>
+
+          <div class="pt-4">
+            <button onclick="goToBuilderStep(2)" class="px-8 py-3.5 rounded-xl bg-earth-500 hover:bg-earth-400 text-forest-950 font-bold text-sm tracking-wide uppercase transition-all shadow-glow-gold hover:scale-105 active:scale-95">
+              Next: Select Ingredients &rarr;
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 2 CONTENT: Select 3-5 Ingredients -->
+        <div id="builder-step-2" class="builder-step hidden space-y-6">
+          <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-forest-700/60 pb-4">
+            <div>
+              <h3 class="font-serif text-2xl font-bold text-cream-50">Select 3 to 5 Ingredients</h3>
+              <p class="text-xs text-cream-300/80">Each selection includes a generous 100g artisanal jar portion.</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <span id="builder-selected-counter" class="px-4 py-2 rounded-xl bg-earth-500/20 border border-earth-400 text-earth-300 text-xs font-bold">
+                Selected: 0 / 5
+              </span>
+            </div>
+          </div>
+
+          <!-- Ingredients Selection Grid -->
+          <div id="builder-ingredients-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <!-- Dynamically populated from PRODUCTS array -->
+          </div>
+
+          <!-- Navigation Controls for Step 2 -->
+          <div class="flex justify-between items-center pt-6 border-t border-forest-700/60">
+            <button onclick="goToBuilderStep(1)" class="px-6 py-3 rounded-xl bg-forest-800 hover:bg-forest-700 text-cream-200 text-xs font-bold uppercase transition-colors">
+              &larr; Back to Name
+            </button>
+            <button id="step-2-next-btn" onclick="goToBuilderStep(3)" disabled class="px-8 py-3.5 rounded-xl bg-earth-500/40 text-forest-950 cursor-not-allowed font-bold text-sm tracking-wide uppercase transition-all">
+              Review Box &rarr;
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 3 CONTENT: Summary & Add to Cart -->
+        <div id="builder-step-3" class="builder-step hidden max-w-2xl mx-auto space-y-8">
+          <div class="text-center space-y-2">
+            <div class="text-xs uppercase tracking-widest text-earth-300 font-bold">Custom Artisan Packaging</div>
+            <h3 id="summary-box-title" class="font-serif text-3xl font-bold text-cream-50">"My Custom Box"</h3>
+            <p class="text-xs text-cream-300/80">Crafted in sustainable teakwood casing with wax seal certification.</p>
+          </div>
+
+          <!-- Ingredients List Preview -->
+          <div class="bg-forest-900/90 rounded-2xl p-6 border border-earth-500/30 space-y-4">
+            <div class="flex justify-between items-center text-xs text-earth-300 font-bold uppercase border-b border-forest-800 pb-2">
+              <span>Selected Components</span>
+              <span>Portion Weight</span>
+            </div>
+            <div id="summary-ingredients-list" class="space-y-2.5">
+              <!-- Rendered via JS -->
+            </div>
+
+            <!-- Price & Calorie Live Calculation Strip -->
+            <div class="pt-4 border-t border-forest-800 space-y-2">
+              <div class="flex justify-between text-xs text-cream-300">
+                <span>Wooden Keepsake Box &amp; Seal</span>
+                <span>₹150</span>
+              </div>
+              <div class="flex justify-between text-xs text-cream-300">
+                <span>Artisan Ingredients Combined</span>
+                <span id="summary-ingredients-price">₹0</span>
+              </div>
+              <div class="flex justify-between text-xs text-earth-300 font-medium">
+                <span>Estimated Energy Potential</span>
+                <span id="summary-calories-val">~1,250 kcal</span>
+              </div>
+              <div class="flex justify-between text-lg font-serif font-bold text-cream-50 pt-3 border-t border-forest-700">
+                <span>Total Box Price</span>
+                <span id="summary-total-price" class="text-earth-300 font-sans">₹0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <button onclick="goToBuilderStep(2)" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-forest-800 hover:bg-forest-700 text-cream-200 text-xs font-bold uppercase transition-colors">
+              &larr; Modify Ingredients
+            </button>
+            <button id="add-box-cart-btn" onclick="addCustomBoxToCart(event)" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-earth-500 hover:bg-earth-400 text-forest-950 font-bold text-sm tracking-wide uppercase transition-all shadow-glow-gold hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
+              <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+              <span>Add Custom Box to Cart</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ========================================================
+       SECTION 10: CUSTOMER REVIEWS CAROUSEL
+       ======================================================== -->
+  <section id="reviews" class="py-24 bg-cream-100 relative">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-forest-100 text-forest-800 text-xs font-bold uppercase tracking-wider mb-3">
+          <i data-lucide="star" class="w-3.5 h-3.5 text-amber-500 fill-amber-500"></i>
+          <span>Verified Enthusiasts</span>
+        </div>
+        <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-forest-950 tracking-tight">
+          Praise from the Table
+        </h2>
+        <p class="text-forest-700/80 text-sm sm:text-base mt-2">
+          Discover why discerning chefs, endurance athletes, and functional nutritionists choose Terra Natura.
+        </p>
+      </div>
+
+      <!-- Carousel Container with Pause on Hover -->
+      <div id="reviews-carousel-box" class="relative glass-card rounded-3xl p-8 sm:p-12 shadow-glass-lg border border-earth-600/30 overflow-hidden">
+        
+        <!-- Big Decorative Quote Mark -->
+        <div class="absolute -top-6 -right-6 text-9xl font-serif text-earth-600/10 select-none pointer-events-none">
+          “
+        </div>
+
+        <div id="carousel-slide-content" class="min-h-[220px] flex flex-col justify-between transition-opacity duration-300">
+          <!-- Slide Injected by JS -->
+        </div>
+
+        <!-- Carousel Navigation Controls -->
+        <div class="flex items-center justify-between pt-8 border-t border-earth-600/15 mt-6">
+          <!-- Dot Indicators -->
+          <div id="carousel-dots" class="flex items-center gap-2">
+            <!-- Injected by JS -->
+          </div>
+
+          <!-- Arrow Buttons -->
+          <div class="flex items-center gap-3">
+            <button onclick="prevReview()" class="p-2.5 rounded-full bg-cream-200 hover:bg-forest-800 hover:text-cream-100 text-forest-900 transition-colors shadow-sm" aria-label="Previous Review">
+              <i data-lucide="chevron-left" class="w-5 h-5"></i>
+            </button>
+            <button onclick="nextReview()" class="p-2.5 rounded-full bg-cream-200 hover:bg-forest-800 hover:text-cream-100 text-forest-900 transition-colors shadow-sm" aria-label="Next Review">
+              <i data-lucide="chevron-right" class="w-5 h-5"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ========================================================
+       SECTION 10.5: ARTISAN CONCIERGE & CONTACT
+       ======================================================== -->
+  <section id="contact" class="py-24 relative overflow-hidden bg-cream-100">
+    <!-- Subtle Ambient Glow -->
+    <div class="absolute -top-32 -left-32 w-96 h-96 bg-earth-400/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-forest-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-forest-100 text-forest-800 text-xs font-semibold tracking-wider uppercase mb-3">
+          <i data-lucide="message-square" class="w-3.5 h-3.5 text-earth-800"></i>
+          Direct Harvest Concierge
+        </div>
+        <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-forest-950 mb-4">
+          Connect With Our Roastery
+        </h2>
+        <p class="text-sm sm:text-base text-forest-800/80 leading-relaxed">
+          Inquiring about bespoke wedding or corporate gift boxes, seasonal harvest allocations, or tailored nutrition guidance? Our artisan team responds within 24 hours.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left: Contact Details & Info Cards (5 cols) -->
+        <div class="lg:col-span-5 space-y-6">
+          
+          <!-- Head Atelier & Roastery Card -->
+          <div class="glass-cream rounded-3xl p-6 sm:p-8 border border-earth-600/25 shadow-glass space-y-6">
+            <h3 class="font-serif text-xl font-bold text-forest-950 flex items-center gap-2.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse"></span>
+              Atelier &amp; Apothecary HQ
+            </h3>
+
+            <!-- Details Item: Physical Location -->
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-xl bg-forest-800 text-earth-400 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                <i data-lucide="map-pin" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="text-xs uppercase tracking-wider font-bold text-earth-900">Roastery &amp; Botanical Lab</div>
+                <div class="text-sm font-semibold text-forest-950 mt-0.5">Terra Natura Provisions Ltd.</div>
+                <div class="text-xs text-forest-800/80 leading-relaxed mt-0.5">
+                  No. 18/4, Nilgiri Foothills Organic Corridor, Mettupalayam Road<br>
+                  Coimbatore, Tamil Nadu 641029 — India
+                </div>
+              </div>
+            </div>
+
+            <!-- Details Item: Phone / WhatsApp -->
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-xl bg-forest-800 text-earth-400 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                <i data-lucide="phone-call" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="text-xs uppercase tracking-wider font-bold text-earth-900">Direct Telephone &amp; WhatsApp</div>
+                <a href="tel:+919876543210" class="text-sm font-semibold text-forest-950 hover:text-earth-700 transition-colors block mt-0.5">
+                  +91 (0) 98765 43210
+                </a>
+                <div class="text-[11px] text-forest-800/70">Mon – Sat: 9:00 AM – 7:30 PM IST</div>
+              </div>
+            </div>
+
+            <!-- Details Item: Direct Email Addresses -->
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-xl bg-forest-800 text-earth-400 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                <i data-lucide="mail" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="text-xs uppercase tracking-wider font-bold text-earth-900">Electronic Mail Inquiries</div>
+                <a href="mailto:meiofthemist@gmail.com" class="text-sm font-semibold text-forest-950 hover:text-earth-700 transition-colors block mt-0.5 font-mono">
+                  meiofthemist@gmail.com
+                </a>
+                <span class="text-[11px] text-forest-800/80 block mt-0.5">
+                  Direct recipient for all customer inquiries, custom curations &amp; orders.
+                </span>
+              </div>
+            </div>
+
+            <!-- Details Item: Hours -->
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-xl bg-forest-800 text-earth-400 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                <i data-lucide="clock" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="text-xs uppercase tracking-wider font-bold text-earth-900">Dispatch &amp; Fresh Roasting Schedule</div>
+                <div class="text-xs text-forest-800/80 mt-0.5">
+                  Roasted freshly every morning 06:00 AM. Orders placed by 12:00 PM ship same-day in vacuum-nitrogen sealed glass jars.
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Quick Notice Card -->
+          <div class="p-5 rounded-2xl bg-earth-500/15 border border-earth-600/30 text-xs text-forest-900 flex items-center gap-3">
+            <i data-lucide="sparkles" class="w-5 h-5 text-earth-800 shrink-0"></i>
+            <span>Need sample tasting flights for corporate gifting or bulk celebrations? Mention in your note for dedicated tasting boxes.</span>
+          </div>
+
+        </div>
+
+        <!-- Right: Interactive Inquiry Form (7 cols) -->
+        <div class="lg:col-span-7">
+          <div class="glass-cream rounded-3xl p-6 sm:p-10 border border-earth-600/25 shadow-glass">
+            
+            <div class="flex items-center justify-between mb-6 pb-4 border-b border-earth-600/15">
+              <div>
+                <h3 class="font-serif text-2xl font-bold text-forest-950">Send an Inquiry</h3>
+                <p class="text-xs text-forest-800/70 mt-0.5">Direct line to our Master Herbalist &amp; Sourcing Team</p>
+              </div>
+              <span class="px-3 py-1 rounded-full bg-forest-800 text-earth-300 text-[10px] font-bold uppercase tracking-wider">
+                Instant Notification
+              </span>
+            </div>
+
+            <form id="contact-inquiry-form" onsubmit="handleContactSubmit(event)" class="space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold text-forest-900 mb-1.5" for="contact-name">Your Full Name *</label>
+                  <input 
+                    type="text" 
+                    id="contact-name" 
+                    required 
+                    placeholder="e.g. Maya Sharma"
+                    class="w-full px-4 py-3 rounded-xl bg-white/90 border border-earth-600/30 text-xs sm:text-sm text-forest-950 placeholder-forest-400 focus:outline-none focus:border-earth-600 focus:ring-1 focus:ring-earth-600 transition-all"
+                  >
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-forest-900 mb-1.5" for="contact-email">Email Address *</label>
+                  <input 
+                    type="email" 
+                    id="contact-email" 
+                    required 
+                    placeholder="e.g. maya@domain.com"
+                    class="w-full px-4 py-3 rounded-xl bg-white/90 border border-earth-600/30 text-xs sm:text-sm text-forest-950 placeholder-forest-400 focus:outline-none focus:border-earth-600 focus:ring-1 focus:ring-earth-600 transition-all"
+                  >
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold text-forest-900 mb-1.5" for="contact-phone">Phone / WhatsApp (Optional)</label>
+                  <input 
+                    type="tel" 
+                    id="contact-phone" 
+                    placeholder="+91 90000 00000"
+                    class="w-full px-4 py-3 rounded-xl bg-white/90 border border-earth-600/30 text-xs sm:text-sm text-forest-950 placeholder-forest-400 focus:outline-none focus:border-earth-600 focus:ring-1 focus:ring-earth-600 transition-all"
+                  >
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-forest-900 mb-1.5" for="contact-subject">Inquiry Nature</label>
+                  <select 
+                    id="contact-subject"
+                    class="w-full px-4 py-3 rounded-xl bg-white/90 border border-earth-600/30 text-xs sm:text-sm text-forest-950 focus:outline-none focus:border-earth-600 focus:ring-1 focus:ring-earth-600 transition-all"
+                  >
+                    <option value="Custom Box &amp; Personal Curation">Custom Box &amp; Personal Curation</option>
+                    <option value="Corporate / Wedding Gifting">Corporate / Wedding Bulk Gifting</option>
+                    <option value="Nutritional &amp; Allergen Consultation">Nutritional &amp; Allergen Consultation</option>
+                    <option value="Wholesale &amp; Retail Partnerships">Wholesale &amp; Retail Partnerships</option>
+                    <option value="Existing Order Assistance">Existing Order Assistance</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-forest-900 mb-1.5" for="contact-message">Message or Specifications *</label>
+                <textarea 
+                  id="contact-message" 
+                  rows="4" 
+                  required 
+                  placeholder="Share details of what you're looking for, dietary requirements, or quantity considerations..."
+                  class="w-full px-4 py-3 rounded-xl bg-white/90 border border-earth-600/30 text-xs sm:text-sm text-forest-950 placeholder-forest-400 focus:outline-none focus:border-earth-600 focus:ring-1 focus:ring-earth-600 transition-all resize-none"
+                ></textarea>
+              </div>
+
+              <div class="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <span class="text-[11px] text-forest-800/70 flex items-center gap-1.5">
+                  <i data-lucide="shield-check" class="w-4 h-4 text-emerald-700"></i>
+                  Zero spam promise. Encrypted &amp; private communication.
+                </span>
+
+                <button 
+                  type="submit" 
+                  id="contact-submit-btn"
+                  class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-forest-800 hover:bg-forest-900 text-cream-100 font-bold text-xs uppercase tracking-wider transition-all shadow-glow-forest hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
+                >
+                  <i data-lucide="send" class="w-4 h-4 text-earth-300"></i>
+                  <span>Transmit Inquiry</span>
+                </button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ========================================================
+       SECTION 11: FOOTER & NEWSLETTER
+       ======================================================== -->
+  <footer class="bg-forest-950 text-cream-200 pt-20 pb-12 border-t border-forest-800 relative overflow-hidden">
+    
+    <!-- Background Botanical Watermark -->
+    <div class="absolute bottom-0 right-0 opacity-5 text-earth-400 pointer-events-none w-96 h-96">
+      <svg viewBox="0 0 100 100" fill="currentColor">
+        <path d="M50 0 C20 30 10 70 50 100 C90 70 80 30 50 0 Z"/>
+      </svg>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <!-- Newsletter Glass Card -->
+      <div class="glass-dark rounded-3xl p-8 sm:p-12 mb-16 border border-earth-500/25 flex flex-col lg:flex-row items-center justify-between gap-8">
+        <div class="max-w-xl text-center lg:text-left">
+          <div class="text-xs uppercase tracking-widest text-earth-300 font-bold mb-2">Artisan Newsletter</div>
+          <h3 class="font-serif text-2xl sm:text-3xl font-bold text-cream-50">Join Our Harvest Newsletter</h3>
+          <p class="text-xs sm:text-sm text-cream-300/80 mt-1">
+            Subscribe to receive seasonal harvest updates, artisanal roasting schedules, exclusive member pricing, and an instant <strong>15% welcome discount</strong> sent to your email.
+          </p>
+        </div>
+
+        <form id="newsletter-form" onsubmit="handleNewsletterSubmit(event)" class="w-full lg:w-auto flex flex-col sm:flex-row gap-3">
+          <input 
+            type="email" 
+            id="newsletter-email" 
+            required 
+            placeholder="Enter your email address" 
+            class="px-5 py-3.5 rounded-xl bg-forest-900/90 border border-earth-500/30 text-cream-100 placeholder-forest-400 text-sm focus:outline-none focus:border-earth-400 min-w-[280px]"
+          >
+          <button type="submit" id="newsletter-btn" class="px-6 py-3.5 rounded-xl bg-earth-500 hover:bg-earth-400 text-forest-950 font-bold text-xs uppercase tracking-wider transition-all shadow-glow-gold hover:scale-105 active:scale-95 shrink-0 flex items-center justify-center gap-2">
+            <span>Subscribe</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </form>
+      </div>
+
+      <!-- Links Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-8 mb-16">
+        
+        <!-- Brand Summary -->
+        <div class="col-span-2">
+          <div class="flex items-center gap-3.5 mb-4">
+            <div class="relative w-10 h-10 rounded-2xl bg-gradient-to-br from-earth-400 via-earth-600 to-forest-800 p-[1.5px] shadow-md shrink-0">
+              <div class="w-full h-full rounded-[14px] bg-forest-900 flex items-center justify-center overflow-hidden">
+                <svg class="w-6 h-6" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="32" cy="32" r="28" stroke="#c4a265" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.6"/>
+                  <path d="M32 10 C46 22 47 44 32 54 C17 44 18 22 32 10 Z" fill="#2d5a3d" opacity="0.6"/>
+                  <path d="M32 15 C41 26 42 42 32 49 C22 42 23 26 32 15 Z" fill="#c4a265"/>
+                  <path d="M32 18 L32 46" stroke="#0a1710" stroke-width="1.5" stroke-linecap="round"/>
+                  <circle cx="32" cy="13" r="2" fill="#faf7f2"/>
+                </svg>
+              </div>
+            </div>
+            <div class="flex flex-col">
+              <span class="font-serif text-xl font-bold text-cream-50 tracking-tight">Terra Natura</span>
+              <span class="text-[9px] uppercase tracking-widest text-earth-300 font-semibold -mt-0.5">Artisan Harvest Reserve</span>
+            </div>
+          </div>
+          <p class="text-xs text-cream-300/75 leading-relaxed max-w-sm">
+            Ethically sourced botanical dry fruits, cold-shelled seeds, and activated nuts. Honoring soil microbiome diversity and authentic heirloom flavors.
+          </p>
+          <div class="flex items-center gap-3.5 mt-6">
+            <!-- Instagram Official Brand Badge -->
+            <a href="https://www.instagram.com/_guts_.ig/" target="_blank" rel="noopener noreferrer" class="group/social relative w-10 h-10 rounded-xl bg-forest-900 border border-forest-800 hover:border-transparent text-cream-300 hover:text-white transition-all duration-300 transform hover:scale-110 hover:-translate-y-0.5 flex items-center justify-center shadow-md overflow-hidden" aria-label="Instagram Profile" title="Follow @terra_natura on Instagram">
+              <div class="absolute inset-0 bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] opacity-0 group-hover/social:opacity-100 transition-opacity duration-300"></div>
+              <svg class="w-5 h-5 relative z-10 fill-current" viewBox="0 0 24 24">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+            </a>
+
+            <!-- WhatsApp Official Brand Badge -->
+            <a href="https://wa.me/919876543210?text=Hello%20Terra%20Natura%2C%20I%20would%20like%20to%20inquire%20about%20your%20artisan%20provisions." target="_blank" rel="noopener noreferrer" class="group/social relative w-10 h-10 rounded-xl bg-forest-900 border border-forest-800 hover:border-transparent text-cream-300 hover:text-white transition-all duration-300 transform hover:scale-110 hover:-translate-y-0.5 flex items-center justify-center shadow-md overflow-hidden" aria-label="WhatsApp Concierge" title="Chat with us on WhatsApp">
+              <div class="absolute inset-0 bg-[#25D366] opacity-0 group-hover/social:opacity-100 transition-opacity duration-300"></div>
+              <svg class="w-5 h-5 relative z-10 fill-current" viewBox="0 0 24 24">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+              </svg>
+            </a>
+
+            <!-- YouTube Official Brand Badge -->
+            <a href="https://youtube.com/@TerraNaturaArtisan" target="_blank" rel="noopener noreferrer" class="group/social relative w-10 h-10 rounded-xl bg-forest-900 border border-forest-800 hover:border-transparent text-cream-300 hover:text-white transition-all duration-300 transform hover:scale-110 hover:-translate-y-0.5 flex items-center justify-center shadow-md overflow-hidden" aria-label="YouTube Channel" title="Watch Harvest & Roasting Films on YouTube">
+              <div class="absolute inset-0 bg-[#FF0000] opacity-0 group-hover/social:opacity-100 transition-opacity duration-300"></div>
+              <svg class="w-5 h-5 relative z-10 fill-current" viewBox="0 0 24 24">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+            </a>
+
+            <!-- X (Twitter) Official Brand Badge -->
+            <a href="https://twitter.com/TerraNaturaNuts" target="_blank" rel="noopener noreferrer" class="group/social relative w-10 h-10 rounded-xl bg-forest-900 border border-forest-800 hover:border-transparent text-cream-300 hover:text-white transition-all duration-300 transform hover:scale-110 hover:-translate-y-0.5 flex items-center justify-center shadow-md overflow-hidden" aria-label="X / Twitter Profile" title="Follow us on X (Twitter)">
+              <div class="absolute inset-0 bg-black opacity-0 group-hover/social:opacity-100 transition-opacity duration-300"></div>
+              <svg class="w-4 h-4 relative z-10 fill-current" viewBox="0 0 24 24">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Col 1 -->
+        <div>
+          <h4 class="font-serif text-sm font-bold text-cream-50 mb-4">Provisions</h4>
+          <ul class="space-y-2 text-xs text-cream-300/80">
+            <li><a href="#products" class="hover:text-earth-300 transition-colors">Pure Seeds</a></li>
+            <li><a href="#products" class="hover:text-earth-300 transition-colors">Crunchy Nuts</a></li>
+            <li><a href="#products" class="hover:text-earth-300 transition-colors">Dried Fruits</a></li>
+            <li><a href="#products" class="hover:text-earth-300 transition-colors">Signature Combos</a></li>
+            <li><a href="#box-builder" class="hover:text-earth-300 transition-colors">Custom Gift Boxes</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 2 -->
+        <div>
+          <h4 class="font-serif text-sm font-bold text-cream-50 mb-4">Philosophy</h4>
+          <ul class="space-y-2 text-xs text-cream-300/80">
+            <li><a href="#" class="hover:text-earth-300 transition-colors">Regenerative Soil</a></li>
+            <li><a href="#" class="hover:text-earth-300 transition-colors">Artisan Roasting</a></li>
+            <li><a href="#" class="hover:text-earth-300 transition-colors">Ethical Single Estate</a></li>
+            <li><a href="#" class="hover:text-earth-300 transition-colors">Zero Plastic Policy</a></li>
+            <li><a href="#" class="hover:text-earth-300 transition-colors">Lab Assay Reports</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3 -->
+        <div>
+          <h4 class="font-serif text-sm font-bold text-cream-50 mb-4">Assistance</h4>
+          <ul class="space-y-2 text-xs text-cream-300/80">
+            <li><a href="#contact" class="hover:text-earth-300 transition-colors">Order Tracking</a></li>
+            <li><a href="#contact" class="hover:text-earth-300 transition-colors">Shipping &amp; Delivery</a></li>
+            <li><a href="#contact" class="hover:text-earth-300 transition-colors">Wholesale &amp; Gifting</a></li>
+            <li><a href="#contact" class="hover:text-earth-300 transition-colors">Privacy &amp; Terms</a></li>
+            <li><a href="#contact" class="hover:text-earth-300 transition-colors">Contact Concierge</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Certifications & Copyright -->
+      <div class="pt-8 border-t border-forest-800/80 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-cream-400/60">
+        <div class="flex flex-wrap items-center gap-4">
+          <span class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-earth-400"></i> USDA Organic Certified</span>
+          <span class="flex items-center gap-1.5"><i data-lucide="shield" class="w-3.5 h-3.5 text-earth-400"></i> Non-GMO Project Verified</span>
+          <span class="flex items-center gap-1.5"><i data-lucide="recycle" class="w-3.5 h-3.5 text-earth-400"></i> 100% Recyclable Glass</span>
+        </div>
+        <div>
+          &copy; 2026 Terra Natura Artisan Provisions Inc. All Rights Reserved.
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+
+  <!-- ========================================================
+       SECTION 5: QUICK VIEW MODAL
+       ======================================================== -->
+  <div id="quick-view-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true">
+    <!-- Backdrop -->
+    <div onclick="closeQuickView()" class="modal-backdrop fixed inset-0 bg-forest-950/70 backdrop-blur-sm transition-opacity"></div>
+
+    <!-- Modal Content Card -->
+    <div class="modal-content relative z-10 w-full max-w-2xl bg-cream-50 rounded-3xl p-6 sm:p-8 shadow-glass-lg border border-earth-600/30 max-h-[90vh] overflow-y-auto">
+      
+      <!-- Close Button -->
+      <button onclick="closeQuickView()" class="absolute top-5 right-5 p-2 rounded-full bg-cream-200 hover:bg-forest-800 hover:text-cream-50 text-forest-900 transition-colors" aria-label="Close modal">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center">
+        <!-- Visual Display Column -->
+        <div class="sm:col-span-5 flex flex-col items-center justify-center bg-cream-200/80 rounded-2xl p-8 border border-earth-600/15">
+          <div id="qv-emoji" class="text-8xl select-none filter drop-shadow-md animate-float-slow">🌰</div>
+          <div id="qv-badge" class="mt-4 px-3 py-1 rounded-full bg-forest-800 text-earth-300 text-xs font-bold uppercase tracking-wider">
+            Organic
+          </div>
+          <div id="qv-origin" class="text-[11px] text-forest-700 font-medium mt-2 flex items-center gap-1">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-earth-700"></i>
+            <span>Styria, Austria</span>
+          </div>
+        </div>
+
+        <!-- Details Column -->
+        <div class="sm:col-span-7 space-y-4">
+          <div>
+            <div id="qv-tags" class="flex flex-wrap gap-1.5 mb-1.5">
+              <!-- Rendered by JS -->
+            </div>
+            <h3 id="qv-title" class="font-serif text-2xl sm:text-3xl font-bold text-forest-950">Roasted Almonds</h3>
+            <div class="flex items-center gap-2 mt-1">
+              <div id="qv-rating-stars" class="flex items-center text-amber-500 text-sm">★★★★★</div>
+              <span id="qv-rating-num" class="text-xs text-forest-800 font-bold">4.9</span>
+              <span id="qv-reviews-count" class="text-xs text-forest-600">(128 reviews)</span>
+            </div>
+          </div>
+
+          <p id="qv-desc" class="text-xs sm:text-sm text-forest-700/90 leading-relaxed">
+            Slow dry-roasted nonpareil almonds with a whisper of hand-harvested pink Himalayan sea salt. Unmatched crunch and natural sweetness.
+          </p>
+
+          <!-- Crunch Factor Rating Bar -->
+          <div class="bg-cream-100 p-3 rounded-xl border border-earth-600/15">
+            <div class="flex justify-between items-center text-xs font-bold text-forest-900 mb-1">
+              <span class="flex items-center gap-1"><i data-lucide="sparkles" class="w-3.5 h-3.5 text-earth-600"></i> Crunch Factor</span>
+              <span id="qv-crunch-num" class="text-earth-800">4.8 / 5.0</span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-cream-300 overflow-hidden">
+              <div id="qv-crunch-bar" class="h-full bg-gradient-to-r from-earth-500 to-forest-600 rounded-full w-[96%]"></div>
+            </div>
+          </div>
+
+          <!-- Nutritional Grid Mini Cards -->
+          <div class="grid grid-cols-3 gap-2 text-center">
+            <div class="bg-cream-200/70 p-2 rounded-lg border border-earth-600/10">
+              <div class="text-[10px] uppercase font-semibold text-forest-600">Protein</div>
+              <div id="qv-protein" class="text-xs font-bold text-forest-950">22%</div>
+            </div>
+            <div class="bg-cream-200/70 p-2 rounded-lg border border-earth-600/10">
+              <div class="text-[10px] uppercase font-semibold text-forest-600">Clean Fats</div>
+              <div id="qv-fats" class="text-xs font-bold text-forest-950">50%</div>
+            </div>
+            <div class="bg-cream-200/70 p-2 rounded-lg border border-earth-600/10">
+              <div class="text-[10px] uppercase font-semibold text-forest-600">Dietary Fiber</div>
+              <div id="qv-fiber" class="text-xs font-bold text-forest-950">12%</div>
+            </div>
+          </div>
+
+          <!-- Weight Selection & Direct Add to Cart -->
+          <div class="pt-2 border-t border-earth-600/15 flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-forest-800 uppercase">Package Size:</span>
+              <div class="flex gap-1.5" id="qv-weight-selector">
+                <button onclick="setQuickViewWeight('250g')" data-weight="250g" class="qv-w-btn px-2.5 py-1 text-xs font-bold rounded-lg border border-earth-600 bg-earth-500 text-forest-950">250g</button>
+                <button onclick="setQuickViewWeight('500g')" data-weight="500g" class="qv-w-btn px-2.5 py-1 text-xs font-bold rounded-lg border border-cream-400 bg-cream-200 text-forest-800">500g</button>
+                <button onclick="setQuickViewWeight('1kg')" data-weight="1kg" class="qv-w-btn px-2.5 py-1 text-xs font-bold rounded-lg border border-cream-400 bg-cream-200 text-forest-800">1kg</button>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-4 pt-1">
+              <div>
+                <span class="text-[10px] uppercase tracking-wider text-forest-600 block">Total Price</span>
+                <span id="qv-price" class="text-2xl font-bold font-serif text-forest-950">₹350</span>
+              </div>
+              <button id="qv-add-cart-btn" onclick="addQuickViewToCart(event)" class="px-6 py-3 rounded-xl bg-forest-800 hover:bg-forest-900 text-cream-50 font-bold text-xs uppercase tracking-wider transition-all shadow-md hover:scale-105 active:scale-95 flex items-center gap-2">
+                <i data-lucide="shopping-bag" class="w-4 h-4 text-earth-400"></i>
+                <span>Add to Cart</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ========================================================
+       SECTION 7: CART SLIDE-OVER DRAWER
+       ======================================================== -->
+  <div id="cart-drawer" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
+    <!-- Backdrop -->
+    <div onclick="closeCartDrawer()" class="fixed inset-0 bg-forest-950/60 backdrop-blur-sm transition-opacity"></div>
+
+    <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
+      <div class="w-screen max-w-md bg-cream-50 shadow-2xl flex flex-col border-l border-earth-600/30">
+        
+        <!-- Cart Drawer Header -->
+        <div class="px-6 py-5 bg-forest-900 text-cream-100 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <i data-lucide="shopping-bag" class="w-5 h-5 text-earth-300"></i>
+            <h3 class="font-serif text-xl font-bold text-cream-50">Artisan Basket</h3>
+          </div>
+          <button onclick="closeCartDrawer()" class="p-2 rounded-full hover:bg-forest-800 text-cream-300 transition-colors" aria-label="Close cart">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Free Shipping Progress Bar -->
+        <div class="bg-forest-800/10 px-6 py-3 border-b border-earth-600/15">
+          <div class="flex justify-between items-center text-xs font-semibold text-forest-900 mb-1.5">
+            <span id="shipping-progress-text">Add ₹250 more for Free Carbon-Neutral Shipping!</span>
+            <i data-lucide="truck" class="w-4 h-4 text-earth-800"></i>
+          </div>
+          <div class="w-full h-2 rounded-full bg-cream-300 overflow-hidden">
+            <div id="shipping-progress-bar" class="h-full bg-gradient-to-r from-earth-500 to-forest-600 rounded-full transition-all duration-500 w-[60%]"></div>
+          </div>
+        </div>
+
+        <!-- Cart Items List Container -->
+        <div id="cart-items-container" class="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <!-- Cart Drawer Footer -->
+        <div class="border-t border-earth-600/20 bg-cream-100/90 p-6 space-y-4">
+          
+          <!-- Promo Code Bar -->
+          <div class="flex gap-2">
+            <input 
+              type="text" 
+              id="promo-input" 
+              placeholder="Promo code (Try TERRA10)" 
+              class="flex-1 px-3 py-2 text-xs rounded-lg bg-white border border-earth-600/20 uppercase font-semibold focus:outline-none focus:border-earth-600"
+            >
+            <button onclick="applyPromoCode()" class="px-4 py-2 rounded-lg bg-forest-800 hover:bg-forest-900 text-cream-100 text-xs font-bold uppercase transition-colors">
+              Apply
+            </button>
+          </div>
+
+          <div class="space-y-1.5 text-xs text-forest-800">
+            <div class="flex justify-between">
+              <span>Subtotal</span>
+              <span id="cart-subtotal" class="font-bold">₹0</span>
+            </div>
+            <div id="cart-discount-row" class="hidden justify-between text-emerald-700 font-semibold">
+              <span>Artisan Discount (TERRA10)</span>
+              <span id="cart-discount">-₹0</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Carbon-Neutral Shipping</span>
+              <span id="cart-shipping" class="font-bold">₹80</span>
+            </div>
+            <div class="flex justify-between text-base font-serif font-bold text-forest-950 pt-2 border-t border-earth-600/15">
+              <span>Grand Total</span>
+              <span id="cart-grand-total" class="font-sans text-lg text-forest-950">₹0</span>
+            </div>
+          </div>
+
+          <button id="cart-checkout-btn" onclick="openCheckoutModal()" class="w-full py-4 rounded-xl bg-earth-500 hover:bg-earth-400 text-forest-950 font-bold text-xs uppercase tracking-wider transition-all shadow-glow-gold hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
+            <span>Proceed to Checkout</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================================
+       SECTION 8: CHECKOUT FORM MODAL
+       ======================================================== -->
+  <div id="checkout-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true">
+    <!-- Backdrop -->
+    <div onclick="closeCheckoutModal()" class="fixed inset-0 bg-forest-950/70 backdrop-blur-sm transition-opacity"></div>
+
+    <div class="modal-content relative z-10 w-full max-w-lg bg-cream-50 rounded-3xl p-6 sm:p-8 shadow-glass-lg border border-earth-600/30 max-h-[90vh] overflow-y-auto">
+      
+      <button onclick="closeCheckoutModal()" class="absolute top-5 right-5 p-2 rounded-full bg-cream-200 hover:bg-forest-800 hover:text-cream-50 text-forest-900 transition-colors" aria-label="Close checkout">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="mb-6">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-earth-800">Secure Order Verification</div>
+        <h3 class="font-serif text-2xl font-bold text-forest-950">Artisan Delivery Details</h3>
+        <p class="text-xs text-forest-700/80 mt-1">Direct single-batch dispatch within 24 hours.</p>
+      </div>
+
+      <form id="checkout-form" onsubmit="handlePlaceOrder(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-forest-900 mb-1">Full Recipient Name *</label>
+          <input 
+            type="text" 
+            id="order-name" 
+            required 
+            placeholder="e.g., Alexandra Wright"
+            class="w-full px-4 py-3 rounded-xl bg-white border border-earth-600/30 text-xs sm:text-sm text-forest-950 focus:outline-none focus:border-earth-600 focus:ring-1 focus:ring-earth-600"
+          >
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-forest-900 mb-1">Email Address (for order manifest &amp; tracking) *</label>
+          <input 
+            type="email" 
+            id="order-email" 
+            required 
+            placeholder="e.g., alexandra@domain.com"
+            class="w-full px-4 py-3 rounded-xl bg-white border border-earth-600/30 text-xs sm:text-sm text-forest-950 focus:outline-none focus:border-earth-600 focus:ring-1 focus:ring-earth-600"
+          >
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-forest-900 mb-1">Delivery Address *</label>
+          <textarea 
+            id="order-address" 
+            required 
+            rows="3" 
+            placeholder="Apartment/Villa number, Street name, City, Pincode"
+            class="w-full px-4 py-3 rounded-xl bg-white border border-earth-600/30 text-xs sm:text-sm text-forest-950 focus:outline-none focus:border-earth-600 focus:ring-1 focus:ring-earth-600"
+          ></textarea>
+        </div>
+
+        <!-- Payment Mode Simulation -->
+        <div>
+          <label class="block text-xs font-bold text-forest-900 mb-1.5">Payment Method</label>
+          <div class="grid grid-cols-3 gap-2">
+            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-earth-600 bg-earth-50 text-forest-950 text-xs font-semibold cursor-pointer">
+              <input type="radio" name="pay-method" value="upi" checked class="text-earth-600 focus:ring-earth-500">
+              <span>UPI / Instant</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-cream-300 bg-white text-forest-950 text-xs font-semibold cursor-pointer">
+              <input type="radio" name="pay-method" value="card" class="text-earth-600 focus:ring-earth-500">
+              <span>Card</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-cream-300 bg-white text-forest-950 text-xs font-semibold cursor-pointer">
+              <input type="radio" name="pay-method" value="cod" class="text-earth-600 focus:ring-earth-500">
+              <span>COD</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Order Summary Pill -->
+        <div class="bg-forest-800/10 p-3.5 rounded-xl border border-earth-600/20 flex justify-between items-center text-xs font-bold text-forest-950">
+          <span>Amount Payable:</span>
+          <span id="checkout-payable-total" class="font-serif text-lg text-forest-900">₹0</span>
+        </div>
+
+        <!-- Submit Button with Spinner -->
+        <button 
+          type="submit" 
+          id="place-order-btn" 
+          class="w-full py-4 rounded-xl bg-forest-800 hover:bg-forest-900 text-cream-50 font-bold text-xs uppercase tracking-wider transition-all shadow-md hover:scale-[1.01] active:scale-95 flex items-center justify-center gap-2.5"
+        >
+          <span id="place-order-text">Place Harvest Order</span>
+          <div id="place-order-spinner" class="hidden w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+
+  <!-- ========================================================
+       ORDER SUCCESS MODAL WITH CONFETTI & RECEIPT
+       ======================================================== -->
+  <div id="order-success-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-forest-950/80 backdrop-blur-md transition-opacity"></div>
+
+    <div class="modal-content relative z-10 w-full max-w-lg bg-cream-50 rounded-3xl p-6 sm:p-8 shadow-glass-lg border border-earth-600/30 text-center max-h-[90vh] overflow-y-auto">
+      
+      <!-- Animated SVG Checkmark -->
+      <div class="w-16 h-16 mx-auto rounded-full bg-emerald-100 flex items-center justify-center mb-4">
+        <svg class="w-10 h-10 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12" class="check-animation"></polyline>
+        </svg>
+      </div>
+
+      <div class="inline-block px-3 py-1 rounded-full bg-earth-100 text-earth-800 text-xs font-bold uppercase tracking-wider mb-2">
+        Confirmed &amp; Dispatched
+      </div>
+
+      <h3 class="font-serif text-2xl sm:text-3xl font-bold text-forest-950">Thank You For Your Harvest Order!</h3>
+      <p class="text-xs text-forest-700/80 mt-1.5">
+        Order reference <strong id="success-order-id" class="text-forest-900 font-mono">TN-84920</strong> has been registered.
+      </p>
+
+      <!-- Simulated Receipt -->
+      <div class="mt-6 bg-white rounded-2xl p-4 border border-earth-600/20 text-left space-y-3">
+        <div class="flex justify-between items-center text-xs text-forest-600 border-b border-earth-600/10 pb-2">
+          <span>Date: <span id="receipt-date">Oct 29, 2026</span></span>
+          <span class="font-semibold text-emerald-700">Paid Successfully</span>
+        </div>
+
+        <div id="receipt-items-list" class="space-y-1.5 text-xs text-forest-900">
+          <!-- Injected via JS -->
+        </div>
+
+        <div class="pt-3 border-t border-earth-600/10 space-y-1 text-xs">
+          <div class="flex justify-between text-forest-700">
+            <span>Customer:</span>
+            <span id="receipt-customer-name" class="font-semibold text-forest-950">Alexandra Wright</span>
+          </div>
+          <div class="flex justify-between text-forest-700">
+            <span>Delivery:</span>
+            <span class="font-semibold text-forest-950">Carbon-Neutral Express (2-3 Days)</span>
+          </div>
+          <div class="flex justify-between font-serif font-bold text-base text-forest-950 pt-2 border-t border-earth-600/10">
+            <span>Total Paid</span>
+            <span id="receipt-total-amount" class="font-sans text-forest-900">₹0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <button onclick="closeOrderSuccessModal()" class="w-full py-3.5 rounded-xl bg-forest-800 hover:bg-forest-900 text-cream-50 font-bold text-xs uppercase tracking-wider transition-all shadow-md hover:scale-105 active:scale-95">
+          Continue Exploring Provisions
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ========================================================
+       NEWSLETTER WELCOME EMAIL CONFIRMATION MODAL
+       ======================================================== -->
+  <div id="newsletter-welcome-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-forest-950/80 backdrop-blur-md transition-opacity" onclick="closeNewsletterWelcomeModal()"></div>
+
+    <div class="modal-content relative z-10 w-full max-w-lg bg-cream-50 rounded-3xl p-6 sm:p-8 shadow-glass-lg border border-earth-600/30 text-center max-h-[90vh] overflow-y-auto">
+      
+      <!-- Mail Envelope Icon Badge -->
+      <div class="w-16 h-16 mx-auto rounded-2xl bg-earth-100 text-earth-800 flex items-center justify-center mb-4 shadow-sm">
+        <i data-lucide="mail-check" class="w-8 h-8 text-earth-800"></i>
+      </div>
+
+      <div class="inline-block px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold uppercase tracking-wider mb-2">
+        Welcome Greeting Dispatched
+      </div>
+
+      <h3 class="font-serif text-2xl sm:text-3xl font-bold text-forest-950">Welcome to Terra Natura!</h3>
+      <p class="text-xs sm:text-sm text-forest-700/80 mt-1.5">
+        We have dispatched a welcome letter and member credentials to:
+      </p>
+      <div class="mt-2 inline-block px-4 py-1.5 rounded-xl bg-white border border-earth-600/20 font-mono text-sm font-bold text-forest-900 shadow-sm" id="welcome-modal-email">
+        user@domain.com
+      </div>
+
+      <!-- Simulated Email Envelope Card -->
+      <div class="mt-5 bg-white rounded-2xl p-5 border border-earth-600/20 text-left space-y-3.5 shadow-sm">
+        <div class="flex items-center justify-between border-b border-earth-600/10 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-forest-800">Incoming Member Dispatch</span>
+          </div>
+          <span class="text-[10px] text-forest-600">Just Now</span>
+        </div>
+
+        <div>
+          <div class="text-xs text-forest-600"><strong>From:</strong> Terra Natura Atelier &lt;meiofthemist@gmail.com&gt;</div>
+          <div class="text-xs text-forest-600"><strong>Subject:</strong> 🌿 Welcome to the Family — Your 15% First Harvest Gift Code Inside</div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-cream-100/70 border border-earth-600/15 text-xs text-forest-900/90 leading-relaxed">
+          <p class="font-serif font-bold text-sm text-forest-950 mb-1">Dear Artisan Food Enthusiast,</p>
+          <p>
+            Thank you for joining our harvest circle. Your taste for small-batch, single-estate dry fruits, seeds, and activated nuts supports our sustainable family farmers in the Nilgiri foothills.
+          </p>
+          
+          <div class="my-3 p-3 rounded-lg bg-forest-900 text-cream-100 text-center flex items-center justify-between">
+            <span class="text-[11px] text-earth-300 uppercase tracking-wider">Exclusive Code:</span>
+            <span class="font-mono font-bold text-earth-400 text-sm tracking-widest bg-forest-950 px-2.5 py-1 rounded">TERRA15</span>
+          </div>
+
+          <p class="text-[11px] text-forest-800/80">
+            Use code <strong>TERRA15</strong> at checkout for 15% off your first artisanal snack box or single provender order.
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-6 flex flex-col sm:flex-row gap-3">
+        <button onclick="closeNewsletterWelcomeModal()" class="w-full py-3.5 rounded-xl bg-forest-800 hover:bg-forest-900 text-cream-50 font-bold text-xs uppercase tracking-wider transition-all shadow-md hover:scale-105 active:scale-95">
+          Start Exploring Harvests
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ========================================================
+       TOAST NOTIFICATION CONTAINER
+       ======================================================== -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2.5 pointer-events-none">
+    <!-- Toasts dynamically appended here -->
+  </div>
+
+
+  <!-- ========================================================
+       JAVASCRIPT IMPLEMENTATION
+       ======================================================== -->
+  <script>
+    /* ==========================================================
+       EMAIL SERVICE CONFIGURATION (EmailJS Client-Side Delivery)
+       ==========================================================
+       To send live emails to any user's real email address without
+       needing a backend server, simply add your free EmailJS credentials below:
+       1. Sign up at https://www.emailjs.com/ (Free tier: 200 emails/month)
+       2. Add your Gmail service (meiofthemist@gmail.com)
+       3. Create templates for "newsletter_welcome" & "order_confirmation"
+       4. Fill in the keys below:
+    */
+    const EMAIL_CONFIG = {
+      publicKey: '262xd24HhrRtLwWC4', // Active Public Key
+      serviceId: 'service_s7pldoh',    // Active Gmail Service ID
+      templates: {
+        newsletter: 'template_9i2z9tl', // Confirmed Template ID
+        order: 'template_9i2z9tl',
+        inquiry: 'template_9i2z9tl'
+      }
+    };
+
+    // Initialize EmailJS if configured
+    if (window.emailjs && EMAIL_CONFIG.publicKey) {
+      emailjs.init(EMAIL_CONFIG.publicKey);
+    }
+
+    /* Helper function to dispatch real emails */
+    async function sendRealEmail(templateType, templateParams) {
+      if (window.emailjs && EMAIL_CONFIG.publicKey && EMAIL_CONFIG.serviceId) {
+        // Prepare list of potential template IDs (b51wood and template_9i2z9tl)
+        const candidateTemplateIds = [EMAIL_CONFIG.templates[templateType], 'template_9i2z9tl', 'b51wood'];
+        
+        for (const templateId of candidateTemplateIds) {
+          try {
+            console.log(`[EmailJS] Attempting dispatch to ${templateParams.to_email} with template: ${templateId}...`);
+            const response = await emailjs.send(EMAIL_CONFIG.serviceId, templateId, templateParams, EMAIL_CONFIG.publicKey);
+            console.log(`[EmailJS] Live email delivered to ${templateParams.to_email}:`, response.status, response.text);
+            showToast(`Real email delivered to ${templateParams.to_email}! Check your inbox.`, 'success');
+            return { success: true };
+          } catch (err) {
+            console.warn(`[EmailJS] Attempt with ${templateId} failed, trying next candidate...`, err);
+            if (templateId === candidateTemplateIds[candidateTemplateIds.length - 1]) {
+              const errorMsg = err?.text || err?.message || JSON.stringify(err);
+              showToast(`EmailJS Notice: ${errorMsg}`, 'error');
+              return { success: false, error: err };
+            }
+          }
+        }
+      } else {
+        console.info(`[Email Dispatch Simulation] Ready for real email to: ${templateParams.to_email || templateParams.email}`);
+        return { success: true, simulated: true };
+      }
+    }
+    /* ==========================================================
+       1. DATA CATALOG: 12 ARTISAN PRODUCTS
+       ========================================================== */
+    const PRODUCTS = [
+      // PURE SEEDS (3)
+      {
+        id: 'pumpkin-seeds',
+        name: 'Pumpkin Seeds',
+        category: 'seeds',
+        basePrice: 180, // for 250g
+        baseWeight: '250g',
+        emoji: '🎃',
+        tags: ['Organic', 'Superfood'],
+        healthTags: ['superfood', 'high-protein'],
+        rating: 4.9,
+        reviewsCount: 142,
+        badge: 'Organic',
+        origin: 'Styria, Austria',
+        crunchFactor: 4.6,
+        description: 'AAA-grade Austrian raw pumpkin seeds, sun-dried and cold-shelled to retain vital zinc, magnesium, and antioxidant sterols.',
+        nutrition: { protein: '30%', healthyFats: '49%', fiber: '6%', calories: '574 kcal/100g' },
+        caloriesPer50g: 287
+      },
+      {
+        id: 'sunflower-seeds',
+        name: 'Sunflower Seeds',
+        category: 'seeds',
+        basePrice: 120,
+        baseWeight: '250g',
+        emoji: '🌻',
+        tags: ['Raw', 'Organic'],
+        healthTags: ['heart-health', 'keto-friendly'],
+        rating: 4.8,
+        reviewsCount: 98,
+        badge: 'Raw & Natural',
+        origin: 'Kavarna, Bulgaria',
+        crunchFactor: 4.2,
+        description: 'Crisp, delicately nutty sunflower kernels rich in natural Vitamin E, selenium, and phytosterols for cardiovascular and skin resilience.',
+        nutrition: { protein: '21%', healthyFats: '51%', fiber: '9%', calories: '584 kcal/100g' },
+        caloriesPer50g: 292
+      },
+      {
+        id: 'chia-seeds',
+        name: 'Chia Seeds',
+        category: 'seeds',
+        basePrice: 220,
+        baseWeight: '250g',
+        emoji: '🌱',
+        tags: ['Superfood', 'Organic'],
+        healthTags: ['superfood', 'energy-boost', 'heart-health'],
+        rating: 4.9,
+        reviewsCount: 220,
+        badge: 'Ancient Superfood',
+        origin: 'Jalisco, Mexico',
+        crunchFactor: 3.5,
+        description: 'Black Aztec chia seeds bursting with plant-based Omega-3 ALA, hydrophilic soluble fiber, and calcium for sustained physical endurance.',
+        nutrition: { protein: '17%', healthyFats: '31%', fiber: '34%', calories: '486 kcal/100g' },
+        caloriesPer50g: 243
+      },
+
+      // CRUNCHY NUTS (4)
+      {
+        id: 'roasted-almonds',
+        name: 'Roasted Almonds',
+        category: 'nuts',
+        basePrice: 350,
+        baseWeight: '250g',
+        emoji: '🌰',
+        tags: ['Best Seller', 'High Protein'],
+        healthTags: ['high-protein', 'keto-friendly', 'heart-health'],
+        rating: 5.0,
+        reviewsCount: 380,
+        badge: 'Best Seller',
+        origin: 'San Joaquin Valley, California',
+        crunchFactor: 5.0,
+        description: 'Slow dry-roasted nonpareil almonds with a whisper of hand-harvested pink Himalayan sea salt. Unmatched crunch and natural sweetness.',
+        nutrition: { protein: '22%', healthyFats: '50%', fiber: '12%', calories: '579 kcal/100g' },
+        caloriesPer50g: 290
+      },
+      {
+        id: 'cashews-premium',
+        name: 'Cashews Premium',
+        category: 'nuts',
+        basePrice: 420,
+        baseWeight: '250g',
+        emoji: '🥜',
+        tags: ['Best Seller', 'Creamy Rich'],
+        healthTags: ['energy-boost', 'heart-health'],
+        rating: 4.9,
+        reviewsCount: 310,
+        badge: 'Jumbo W180',
+        origin: 'Mangalore, India',
+        crunchFactor: 4.6,
+        description: 'King-sized W180 whole cashews, delicately air-toasted to bring out buttery notes with no added oils or artificial glazing.',
+        nutrition: { protein: '18%', healthyFats: '44%', fiber: '3.3%', calories: '553 kcal/100g' },
+        caloriesPer50g: 276
+      },
+      {
+        id: 'walnuts-california',
+        name: 'Walnuts California',
+        category: 'nuts',
+        basePrice: 480,
+        baseWeight: '250g',
+        emoji: '🧠',
+        tags: ['Heart Health', 'Brain Fuel'],
+        healthTags: ['heart-health', 'keto-friendly', 'superfood'],
+        rating: 4.8,
+        reviewsCount: 175,
+        badge: 'California Extra Light',
+        origin: 'Napa County, California',
+        crunchFactor: 4.3,
+        description: 'Cold-cracked golden Chandler walnut halves laden with neuroprotective polyphenols and the highest plant Omega-3s of any tree nut.',
+        nutrition: { protein: '15%', healthyFats: '65%', fiber: '7%', calories: '654 kcal/100g' },
+        caloriesPer50g: 327
+      },
+      {
+        id: 'pistachios',
+        name: 'Pistachios',
+        category: 'nuts',
+        basePrice: 520,
+        baseWeight: '250g',
+        emoji: '💚',
+        tags: ['Keto Friendly', 'Antioxidants'],
+        healthTags: ['keto-friendly', 'high-protein'],
+        rating: 4.9,
+        reviewsCount: 205,
+        badge: 'Naturally Split',
+        origin: 'Kerman, Persia',
+        crunchFactor: 4.9,
+        description: 'Sun-ripened green kernels naturally split on tree branches. Lightly dry-roasted in shell for an unmistakable snap and vibrant earthy flavor.',
+        nutrition: { protein: '20%', healthyFats: '45%', fiber: '10%', calories: '562 kcal/100g' },
+        caloriesPer50g: 281
+      },
+
+      // DRIED FRUITS (3)
+      {
+        id: 'dried-cranberries',
+        name: 'Dried Cranberries',
+        category: 'dry-fruits',
+        basePrice: 260,
+        baseWeight: '250g',
+        emoji: '🍒',
+        tags: ['Organic', 'Antioxidant'],
+        healthTags: ['superfood', 'energy-boost'],
+        rating: 4.7,
+        reviewsCount: 154,
+        badge: 'Apple Sweetened',
+        origin: 'Quebec, Canada',
+        crunchFactor: 2.2,
+        description: 'Whole plump crimson berries slowly infused with natural apple juice extract. Tart, tangy, and bursting with proanthocyanidins.',
+        nutrition: { protein: '1.4%', healthyFats: '1.3%', fiber: '5.7%', calories: '308 kcal/100g' },
+        caloriesPer50g: 154
+      },
+      {
+        id: 'medjool-dates',
+        name: 'Medjool Dates',
+        category: 'dry-fruits',
+        basePrice: 380,
+        baseWeight: '250g',
+        emoji: '🌴',
+        tags: ['Superfood', 'Pre-Workout'],
+        healthTags: ['superfood', 'energy-boost'],
+        rating: 5.0,
+        reviewsCount: 345,
+        badge: 'Royal Jumbo',
+        origin: 'Jordan Valley',
+        crunchFactor: 1.5,
+        description: 'Hand-picked organic royal Medjool dates with soft, caramel-like flesh. Pure natural endurance sugars, potassium, and minerals.',
+        nutrition: { protein: '2%', healthyFats: '0.2%', fiber: '7%', calories: '277 kcal/100g' },
+        caloriesPer50g: 138
+      },
+      {
+        id: 'golden-raisins',
+        name: 'Golden Raisins',
+        category: 'dry-fruits',
+        basePrice: 160,
+        baseWeight: '250g',
+        emoji: '🍇',
+        tags: ['Organic', 'Iron Rich'],
+        healthTags: ['energy-boost', 'heart-health'],
+        rating: 4.6,
+        reviewsCount: 118,
+        badge: 'Sultana Reserve',
+        origin: 'Nashik Valley, India',
+        crunchFactor: 2.0,
+        description: 'Plump amber sultanas gently shade-dried to conserve golden glow, moisture, iron, and a floral honey-like nectar sweetness.',
+        nutrition: { protein: '3%', healthyFats: '0.5%', fiber: '4%', calories: '299 kcal/100g' },
+        caloriesPer50g: 150
+      },
+
+      // CURATED COMBOS (2)
+      {
+        id: 'energy-boost-mix',
+        name: 'Energy Boost Mix',
+        category: 'combos',
+        basePrice: 550, // Base price for 500g
+        baseWeight: '500g',
+        emoji: '⚡',
+        tags: ['Best Seller', 'Pre-Run Fuel'],
+        healthTags: ['energy-boost', 'superfood', 'high-protein'],
+        rating: 4.95,
+        reviewsCount: 460,
+        badge: 'Signature Mix',
+        origin: 'Artisan Kitchen, Terra Natura',
+        crunchFactor: 4.7,
+        description: 'A master synergy of Roasted Almonds, Pumpkin Seeds, Medjool Date slices, Chia Clusters, and Cranberries. Sustained cellular energy.',
+        nutrition: { protein: '18%', healthyFats: '38%', fiber: '11%', calories: '480 kcal/100g' },
+        caloriesPer50g: 240
+      },
+      {
+        id: 'keto-warrior-pack',
+        name: 'Keto Warrior Pack',
+        category: 'combos',
+        basePrice: 680, // Base price for 500g
+        baseWeight: '500g',
+        emoji: '🛡️',
+        tags: ['Keto Friendly', 'Low Carb'],
+        healthTags: ['keto-friendly', 'high-protein'],
+        rating: 4.9,
+        reviewsCount: 265,
+        badge: 'Under 4g Net Carbs',
+        origin: 'Artisan Kitchen, Terra Natura',
+        crunchFactor: 4.8,
+        description: 'High-fat, ultra-low glycemic blend of buttery Macadamias, Pecans, Roasted Almonds, and Pepitas. Zero added sugars or syrups.',
+        nutrition: { protein: '16%', healthyFats: '62%', fiber: '14%', calories: '610 kcal/100g' },
+        caloriesPer50g: 305
+      }
+    ];
+
+    /* ==========================================================
+       2. REVIEWS DATA (5 TESTIMONIALS)
+       ========================================================== */
+    const REVIEWS = [
+      {
+        name: 'Dr. Anya Sharma',
+        role: 'Functional Medicine Physician & Author',
+        avatar: '👩‍⚕️',
+        rating: 5,
+        text: 'The Styrian pumpkin seeds and California walnuts are utterly incomparable. Unbelievably fresh, rich in intact micronutrients, and completely free of rancid oxidized oils. Terra Natura has ruined all supermarket nuts for me!'
+      },
+      {
+        name: 'Marcus Vance',
+        role: 'Ultra-Endurance Trail Runner',
+        avatar: '🏃‍♂️',
+        rating: 5,
+        text: 'The Roasted Almonds and Medjool dates are my secret weapon during 50-mile mountain runs. You can literally smell the slow, artisan roasting when you pop open the airtight glass seal. Truly authentic nourishment.'
+      },
+      {
+        name: 'Priya Deshmukh',
+        role: 'Design Director & Wellness Advocate',
+        avatar: '🎨',
+        rating: 5,
+        text: 'Building my own custom snack box for my studio team has transformed our mid-day slump. The teakwood packaging looks gorgeous on our pantry island, and the taste is clean, crispy, and addictive!'
+      },
+      {
+        name: 'Arjun Mehta',
+        role: 'Michelin-Trained Pastry Chef',
+        avatar: '👨‍🍳',
+        rating: 5,
+        text: 'Best Cashews and Golden Sultanas I have had outside of artisanal plantations in South India. No artificial gloss, no excessive sodium—just pure buttery complexity and floral notes. 10/10 quality.'
+      },
+      {
+        name: 'Elena Rostova',
+        role: 'CrossFit Athlete & Keto Coach',
+        avatar: '🏋️‍♀️',
+        rating: 5,
+        text: 'The Keto Warrior Pack is a lifesaver for clean dietary fats. The macadamia and pecan ratio is generous, net carbs are strictly minimal, and the crunch factor is unmatched anywhere else on the market.'
+      }
+    ];
+
+    /* ==========================================================
+       3. APPLICATION STATE
+       ========================================================== */
+    let cart = [];
+    let currentCategory = 'all';
+    let currentHealthFilter = null;
+    let selectedWeights = {}; // Map of productId -> '250g' | '500g' | '1kg'
+    let currentReviewIndex = 0;
+    let reviewTimer = null;
+    let isPromoApplied = false;
+
+    // Snack Box Builder State
+    let boxName = 'My Artisan Fuel Box';
+    let selectedBoxIngredients = []; // array of product objects
+    let builderCurrentStep = 1;
+
+    // Quick View State
+    let activeQuickViewProduct = null;
+    let quickViewSelectedWeight = '250g';
+
+    /* ==========================================================
+       4. INITIALIZATION ON DOM LOAD
+       ========================================================== */
+    document.addEventListener('DOMContentLoaded', () => {
+      // Default weight state initialization
+      PRODUCTS.forEach(p => {
+        selectedWeights[p.id] = (p.baseWeight === '500g') ? '500g' : '250g';
+      });
+
+      renderProducts(PRODUCTS);
+      initBoxBuilder();
+      renderReviewSlide(currentReviewIndex);
+      startReviewAutoPlay();
+      initHeroParallax();
+      initGSAPAnimations();
+
+      // Initialize Lucide Icons
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+
+      // Review Carousel Hover Pause
+      const carouselEl = document.getElementById('reviews-carousel-box');
+      if (carouselEl) {
+        carouselEl.addEventListener('mouseenter', stopReviewAutoPlay);
+        carouselEl.addEventListener('mouseleave', startReviewAutoPlay);
+      }
+    });
+
+
+    /* ==========================================================
+       5. PRICE CALCULATION LOGIC
+       Requirement: 500g = 1.8x, 1kg = 3.2x (for 250g base)
+       ========================================================== */
+    function calculatePrice(product, weight) {
+      if (product.baseWeight === '500g') {
+        // Base is 500g (Combos)
+        if (weight === '250g') return Math.round(product.basePrice * 0.58);
+        if (weight === '500g') return product.basePrice;
+        if (weight === '1kg') return Math.round(product.basePrice * 1.8);
+      } else {
+        // Base is 250g (Seeds, Nuts, Fruits)
+        if (weight === '250g') return product.basePrice;
+        if (weight === '500g') return Math.round(product.basePrice * 1.8);
+        if (weight === '1kg') return Math.round(product.basePrice * 3.2);
+      }
+      return product.basePrice;
+    }
+
+
+    /* ==========================================================
+       6. PRODUCT CATALOG RENDERING & FILTERING
+       ========================================================== */
+    function renderProducts(productsToRender) {
+      const grid = document.getElementById('product-grid');
+      if (!grid) return;
+
+      if (productsToRender.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-16 text-center text-forest-700">
+            <i data-lucide="sparkles" class="w-12 h-12 mx-auto text-earth-500 mb-3 opacity-60"></i>
+            <h3 class="font-serif text-xl font-bold text-forest-900">No provisions match this filter</h3>
+            <p class="text-xs text-forest-600 mt-1">Try switching categories or clearing active health tags.</p>
+            <button onclick="resetFilters()" class="mt-4 px-4 py-2 rounded-xl bg-forest-800 text-cream-100 text-xs font-bold uppercase tracking-wider">
+              Show All Products
+            </button>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      grid.innerHTML = productsToRender.map(product => {
+        const currentW = selectedWeights[product.id] || (product.baseWeight === '500g' ? '500g' : '250g');
+        const price = calculatePrice(product, currentW);
+
+        return `
+          <div id="product-card-${product.id}" class="product-card glass-card rounded-3xl p-5 flex flex-col justify-between relative group border border-earth-600/20">
+            
+            <!-- Top Tag Pill -->
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-2.5 py-0.5 rounded-full bg-forest-100 text-forest-800 text-[10px] font-bold uppercase tracking-wider border border-forest-600/10">
+                ${product.badge}
+              </span>
+              <div class="flex items-center text-amber-500 text-xs font-bold">
+                ★ <span>${product.rating}</span>
+              </div>
+            </div>
+
+            <!-- Centered Large Emoji Showcase with Hover Zoom -->
+            <div class="py-6 flex flex-col items-center justify-center relative">
+              <div class="w-28 h-28 rounded-2xl bg-cream-200/60 flex items-center justify-center text-6xl group-hover:scale-115 transition-transform duration-500 filter drop-shadow-sm select-none">
+                ${product.emoji}
+              </div>
+              <button 
+                onclick="openQuickView('${product.id}')"
+                class="absolute bottom-1 px-3 py-1 rounded-full bg-forest-900/80 hover:bg-forest-950 text-cream-100 text-[11px] font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm flex items-center gap-1 shadow-md"
+              >
+                <i data-lucide="eye" class="w-3.5 h-3.5 text-earth-400"></i> Quick View
+              </button>
+            </div>
+
+            <!-- Product Info -->
+            <div class="space-y-2 mt-2">
+              <h3 class="font-serif font-bold text-lg text-forest-950 group-hover:text-forest-700 transition-colors">
+                ${product.name}
+              </h3>
+              
+              <div class="flex flex-wrap gap-1">
+                ${product.tags.map(t => `<span class="px-2 py-0.5 rounded-md bg-earth-100 text-earth-800 text-[9px] font-bold uppercase">${t}</span>`).join('')}
+              </div>
+
+              <p class="text-xs text-forest-700/80 line-clamp-2 leading-relaxed">
+                ${product.description}
+              </p>
+            </div>
+
+            <!-- Weight Selector Buttons -->
+            <div class="mt-4 pt-3 border-t border-earth-600/15 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-forest-600">Weight:</span>
+                <div class="flex items-center gap-1">
+                  <button 
+                    onclick="changeProductWeight('${product.id}', '250g')" 
+                    class="px-2 py-0.5 rounded-lg text-[10px] font-bold border transition-colors ${currentW === '250g' ? 'bg-forest-800 text-cream-50 border-forest-800' : 'bg-cream-200 text-forest-800 border-cream-400 hover:bg-cream-300'}"
+                  >250g</button>
+                  <button 
+                    onclick="changeProductWeight('${product.id}', '500g')" 
+                    class="px-2 py-0.5 rounded-lg text-[10px] font-bold border transition-colors ${currentW === '500g' ? 'bg-forest-800 text-cream-50 border-forest-800' : 'bg-cream-200 text-forest-800 border-cream-400 hover:bg-cream-300'}"
+                  >500g</button>
+                  <button 
+                    onclick="changeProductWeight('${product.id}', '1kg')" 
+                    class="px-2 py-0.5 rounded-lg text-[10px] font-bold border transition-colors ${currentW === '1kg' ? 'bg-forest-800 text-cream-50 border-forest-800' : 'bg-cream-200 text-forest-800 border-cream-400 hover:bg-cream-300'}"
+                  >1kg</button>
+                </div>
+              </div>
+
+              <!-- Price & Add To Cart Button -->
+              <div class="flex items-center justify-between gap-2 pt-1">
+                <div class="flex flex-col">
+                  <span class="text-[9px] uppercase tracking-wider text-forest-600 font-semibold">Price (${currentW})</span>
+                  <span id="price-display-${product.id}" class="font-serif text-xl font-bold text-forest-950">₹${price}</span>
+                </div>
+
+                <button 
+                  onclick="triggerAddToCart(event, '${product.id}')"
+                  class="relative overflow-hidden px-4 py-2.5 rounded-xl bg-forest-800 hover:bg-forest-900 text-cream-100 text-xs font-bold uppercase tracking-wider transition-all shadow-md active:scale-95 flex items-center gap-1.5 group-hover:bg-earth-600 group-hover:text-forest-950"
+                >
+                  <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                  <span>Add</span>
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function changeProductWeight(productId, weight) {
+      selectedWeights[productId] = weight;
+      const product = PRODUCTS.find(p => p.id === productId);
+      if (!product) return;
+
+      const newPrice = calculatePrice(product, weight);
+      const priceDisplay = document.getElementById(`price-display-${productId}`);
+      if (priceDisplay) {
+        priceDisplay.textContent = `₹${newPrice}`;
+        // subtle GSAP flash
+        gsap.fromTo(priceDisplay, { scale: 1.15, color: '#c4a265' }, { scale: 1, color: '#11251b', duration: 0.3 });
+      }
+
+      // Update button styling in card
+      const card = document.getElementById(`product-card-${productId}`);
+      if (card) {
+        const buttons = card.querySelectorAll('button[onclick*="changeProductWeight"]');
+        buttons.forEach(btn => {
+          if (btn.getAttribute('onclick').includes(`'${weight}'`)) {
+            btn.className = "px-2 py-0.5 rounded-lg text-[10px] font-bold border transition-colors bg-forest-800 text-cream-50 border-forest-800";
+          } else {
+            btn.className = "px-2 py-0.5 rounded-lg text-[10px] font-bold border transition-colors bg-cream-200 text-forest-800 border-cream-400 hover:bg-cream-300";
+          }
+        });
+      }
+    }
+
+    function setCategoryFilter(category) {
+      currentCategory = category;
+      currentHealthFilter = null;
+      hideFilterStatus();
+
+      // Update tab UI
+      document.querySelectorAll('.cat-filter-btn').forEach(btn => {
+        if (btn.getAttribute('data-cat') === category) {
+          btn.className = "cat-filter-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold tracking-wide whitespace-nowrap transition-all duration-300 bg-forest-800 text-cream-50 shadow-md";
+        } else {
+          btn.className = "cat-filter-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold tracking-wide whitespace-nowrap transition-all duration-300 bg-cream-200 text-forest-800 hover:bg-forest-100";
+        }
+      });
+
+      let filtered = PRODUCTS;
+      if (category !== 'all') {
+        filtered = PRODUCTS.filter(p => p.category === category);
+      }
+
+      // Smooth fade transition
+      const grid = document.getElementById('product-grid');
+      gsap.to(grid, {
+        opacity: 0,
+        y: 8,
+        duration: 0.2,
+        onComplete: () => {
+          renderProducts(filtered);
+          gsap.to(grid, { opacity: 1, y: 0, duration: 0.35 });
+        }
+      });
+    }
+
+    function filterByHealthTag(tag, label) {
+      currentHealthFilter = tag;
+      currentCategory = 'all';
+
+      // Reset cat buttons
+      document.querySelectorAll('.cat-filter-btn').forEach(btn => {
+        btn.className = "cat-filter-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold tracking-wide whitespace-nowrap transition-all duration-300 bg-cream-200 text-forest-800 hover:bg-forest-100";
+      });
+
+      const filtered = PRODUCTS.filter(p => p.healthTags && p.healthTags.includes(tag));
+      showFilterStatus(label);
+
+      const grid = document.getElementById('product-grid');
+      gsap.to(grid, {
+        opacity: 0,
+        y: 8,
+        duration: 0.2,
+        onComplete: () => {
+          renderProducts(filtered);
+          gsap.to(grid, { opacity: 1, y: 0, duration: 0.35 });
+        }
+      });
+
+      // Smooth scroll down to products section
+      const target = document.getElementById('products');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function showFilterStatus(label) {
+      const container = document.getElementById('filter-status-container');
+      const labelEl = document.getElementById('filter-status-label');
+      if (container && labelEl) {
+        labelEl.textContent = label;
+        container.classList.remove('hidden');
+        container.classList.add('inline-flex');
+      }
+    }
+
+    function hideFilterStatus() {
+      const container = document.getElementById('filter-status-container');
+      if (container) {
+        container.classList.add('hidden');
+        container.classList.remove('inline-flex');
+      }
+    }
+
+    function resetFilters() {
+      currentHealthFilter = null;
+      hideFilterStatus();
+      setCategoryFilter('all');
+    }
+
+
+    /* ==========================================================
+       7. PARTICLE BURST ON ADD TO CART & TOAST NOTIFICATION
+       ========================================================== */
+    function triggerAddToCart(event, productId) {
+      event.preventDefault();
+      const product = PRODUCTS.find(p => p.id === productId);
+      if (!product) return;
+
+      const weight = selectedWeights[productId] || (product.baseWeight === '500g' ? '500g' : '250g');
+      const price = calculatePrice(product, weight);
+
+      // Create Particle Burst from Click Coordinates
+      createParticleBurst(event.clientX, event.clientY);
+
+      // Add to Cart Array
+      addToCart({
+        id: `${product.id}-${weight}`,
+        productId: product.id,
+        name: product.name,
+        emoji: product.emoji,
+        weight: weight,
+        price: price,
+        qty: 1
+      });
+
+      // Show Toast Notification
+      showToast(`Added ${product.name} (${weight}) to your basket!`, 'success');
+
+      // Animate Navbar Badge Bounce
+      animateNavbarCart();
+    }
+
+    function createParticleBurst(x, y) {
+      const particleColors = ['#c4a265', '#2d5a3d', '#d4af37', '#1a3a2a', '#e2ece6'];
+      const count = 14;
+
+      for (let i = 0; i < count; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        document.body.appendChild(particle);
+
+        const size = Math.random() * 8 + 4;
+        const color = particleColors[Math.floor(Math.random() * particleColors.length)];
+
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.backgroundColor = color;
+        particle.style.left = `${x}px`;
+        particle.style.top = `${y}px`;
+
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = Math.random() * 80 + 40;
+        const targetX = x + Math.cos(angle) * velocity;
+        const targetY = y + Math.sin(angle) * velocity;
+
+        gsap.to(particle, {
+          x: targetX - x,
+          y: targetY - y,
+          opacity: 0,
+          scale: 0.2,
+          duration: Math.random() * 0.4 + 0.4,
+          ease: 'power2.out',
+          onComplete: () => {
+            particle.remove();
+          }
+        });
+      }
+    }
+
+    function animateNavbarCart() {
+      const badge = document.getElementById('nav-cart-badge');
+      const cartBtn = document.getElementById('cart-btn');
+      if (badge && cartBtn) {
+        gsap.fromTo(cartBtn, { scale: 0.92 }, { scale: 1.08, duration: 0.15, yoyo: true, repeat: 1 });
+        gsap.fromTo(badge, { scale: 1.6 }, { scale: 1, duration: 0.35, ease: 'back.out(2)' });
+      }
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      toast.className = `pointer-events-auto flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-xl text-xs font-semibold backdrop-blur-md transition-all duration-300 border ${
+        type === 'success' 
+          ? 'bg-forest-900/95 text-cream-50 border-earth-400/50 shadow-glow-forest' 
+          : 'bg-cream-50 text-forest-950 border-earth-600/30'
+      }`;
+
+      toast.innerHTML = `
+        <div class="w-5 h-5 rounded-full ${type === 'success' ? 'bg-earth-500 text-forest-950' : 'bg-forest-800 text-white'} flex items-center justify-center shrink-0">
+          <i data-lucide="${type === 'success' ? 'check' : 'bell'}" class="w-3 h-3"></i>
+        </div>
+        <span>${message}</span>
+      `;
+
+      container.appendChild(toast);
+      if (window.lucide) lucide.createIcons();
+
+      gsap.fromTo(toast, { opacity: 0, y: 20, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.35 });
+
+      setTimeout(() => {
+        gsap.to(toast, {
+          opacity: 0,
+          y: -15,
+          scale: 0.9,
+          duration: 0.3,
+          onComplete: () => toast.remove()
+        });
+      }, 3500);
+    }
+
+
+    /* ==========================================================
+       8. CART DRAWER OPERATIONS & STATE
+       ========================================================== */
+    function addToCart(item) {
+      const existing = cart.find(i => i.id === item.id);
+      if (existing) {
+        existing.qty += item.qty;
+      } else {
+        cart.push(item);
+      }
+      renderCart();
+    }
+
+    function updateCartQty(id, delta) {
+      const item = cart.find(i => i.id === id);
+      if (!item) return;
+
+      item.qty += delta;
+      if (item.qty <= 0) {
+        removeFromCart(id);
+      } else {
+        renderCart();
+      }
+    }
+
+    function removeFromCart(id) {
+      cart = cart.filter(i => i.id !== id);
+      renderCart();
+    }
+
+    function renderCart() {
+      const count = cart.reduce((sum, item) => sum + item.qty, 0);
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+      // Update Nav Badge
+      const navBadge = document.getElementById('nav-cart-badge');
+      if (navBadge) navBadge.textContent = count;
+
+      // Free shipping threshold (₹999)
+      const freeShippingThreshold = 999;
+      const progressText = document.getElementById('shipping-progress-text');
+      const progressBar = document.getElementById('shipping-progress-bar');
+      let shippingFee = subtotal >= freeShippingThreshold || subtotal === 0 ? 0 : 80;
+
+      if (progressText && progressBar) {
+        if (subtotal >= freeShippingThreshold) {
+          progressText.textContent = "🎉 Congratulations! Carbon-Neutral Shipping is Free!";
+          progressBar.style.width = '100%';
+        } else {
+          const diff = freeShippingThreshold - subtotal;
+          progressText.textContent = `Add ₹${diff} more for Free Carbon-Neutral Shipping!`;
+          const pct = Math.min(100, Math.round((subtotal / freeShippingThreshold) * 100));
+          progressBar.style.width = `${pct}%`;
+        }
+      }
+
+      // Discount calculation
+      let discount = 0;
+      const discountRow = document.getElementById('cart-discount-row');
+      const discountEl = document.getElementById('cart-discount');
+      if (isPromoApplied && subtotal > 0) {
+        discount = Math.round(subtotal * 0.1);
+        if (discountRow) discountRow.classList.remove('hidden');
+        if (discountEl) discountEl.textContent = `-₹${discount}`;
+      } else {
+        if (discountRow) discountRow.classList.add('hidden');
+      }
+
+      const grandTotal = Math.max(0, subtotal - discount + (subtotal === 0 ? 0 : shippingFee));
+
+      // Update labels in drawer
+      const subtotalEl = document.getElementById('cart-subtotal');
+      const shippingEl = document.getElementById('cart-shipping');
+      const grandTotalEl = document.getElementById('cart-grand-total');
+
+      if (subtotalEl) subtotalEl.textContent = `₹${subtotal}`;
+      if (shippingEl) shippingEl.textContent = (shippingFee === 0 && subtotal > 0) ? 'FREE' : (subtotal === 0 ? '₹0' : `₹${shippingFee}`);
+      if (grandTotalEl) grandTotalEl.textContent = `₹${grandTotal}`;
+
+      // Update checkout payable amount
+      const checkoutTotal = document.getElementById('checkout-payable-total');
+      if (checkoutTotal) checkoutTotal.textContent = `₹${grandTotal}`;
+
+      // Render Item rows
+      const itemsContainer = document.getElementById('cart-items-container');
+      if (!itemsContainer) return;
+
+      if (cart.length === 0) {
+        itemsContainer.innerHTML = `
+          <div class="h-64 flex flex-col items-center justify-center text-center text-forest-700">
+            <div class="w-16 h-16 rounded-full bg-cream-200 flex items-center justify-center text-3xl mb-3 opacity-80">
+              🧺
+            </div>
+            <h4 class="font-serif font-bold text-forest-900 text-lg">Your basket is currently empty</h4>
+            <p class="text-xs text-forest-600 mt-1 max-w-xs">Explore our raw seeds, activated nuts, or create a personalized custom snack box.</p>
+            <button onclick="closeCartDrawer(); window.location.href='#products'" class="mt-4 px-5 py-2.5 rounded-xl bg-forest-800 text-cream-50 text-xs font-bold uppercase tracking-wider">
+              Explore Harvest
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      itemsContainer.innerHTML = cart.map(item => `
+        <div class="flex items-center gap-3.5 bg-white p-3.5 rounded-2xl border border-earth-600/15 shadow-sm">
+          <div class="w-12 h-12 rounded-xl bg-cream-100 flex items-center justify-center text-2xl shrink-0">
+            ${item.emoji}
+          </div>
+
+          <div class="flex-1 min-w-0">
+            <h4 class="font-serif font-bold text-xs sm:text-sm text-forest-950 truncate">${item.name}</h4>
+            <div class="flex items-center gap-2 mt-0.5">
+              <span class="text-[10px] bg-cream-200 text-forest-800 px-1.5 py-0.5 rounded font-semibold">${item.weight}</span>
+              <span class="text-xs font-bold text-forest-900">₹${item.price}</span>
+            </div>
+          </div>
+
+          <!-- Quantity +/- Controls -->
+          <div class="flex items-center gap-1.5 bg-cream-100 rounded-lg p-1 border border-cream-300">
+            <button onclick="updateCartQty('${item.id}', -1)" class="w-5 h-5 rounded hover:bg-white flex items-center justify-center text-forest-800 text-xs font-bold transition-colors">
+              -
+            </button>
+            <span class="text-xs font-bold text-forest-950 px-1">${item.qty}</span>
+            <button onclick="updateCartQty('${item.id}', 1)" class="w-5 h-5 rounded hover:bg-white flex items-center justify-center text-forest-800 text-xs font-bold transition-colors">
+              +
+            </button>
+          </div>
+
+          <!-- Item Total & Trash -->
+          <div class="flex flex-col items-end gap-1">
+            <span class="text-xs font-bold font-serif text-forest-950">₹${item.price * item.qty}</span>
+            <button onclick="removeFromCart('${item.id}')" class="text-rose-600 hover:text-rose-800 p-1" title="Remove item">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openCartDrawer() {
+      const drawer = document.getElementById('cart-drawer');
+      if (!drawer) return;
+      drawer.classList.remove('hidden');
+      renderCart();
+    }
+
+    function closeCartDrawer() {
+      const drawer = document.getElementById('cart-drawer');
+      if (drawer) drawer.classList.add('hidden');
+    }
+
+    function applyPromoCode() {
+      const input = document.getElementById('promo-input');
+      if (!input) return;
+      const val = input.value.trim().toUpperCase();
+
+      if (val === 'TERRA10') {
+        isPromoApplied = true;
+        showToast('Promo code TERRA10 applied! 10% discount deducted.', 'success');
+        renderCart();
+      } else {
+        showToast('Invalid promo code. Use code TERRA10 for 10% off.', 'info');
+      }
+    }
+
+
+    /* ==========================================================
+       9. QUICK VIEW MODAL
+       ========================================================== */
+    function openQuickView(productId) {
+      const product = PRODUCTS.find(p => p.id === productId);
+      if (!product) return;
+
+      activeQuickViewProduct = product;
+      quickViewSelectedWeight = selectedWeights[productId] || (product.baseWeight === '500g' ? '500g' : '250g');
+
+      document.getElementById('qv-emoji').textContent = product.emoji;
+      document.getElementById('qv-badge').textContent = product.badge;
+      document.getElementById('qv-origin').innerHTML = `<i data-lucide="map-pin" class="w-3.5 h-3.5 text-earth-700"></i> <span>${product.origin}</span>`;
+      document.getElementById('qv-title').textContent = product.name;
+      document.getElementById('qv-desc').textContent = product.description;
+      document.getElementById('qv-rating-num').textContent = product.rating;
+      document.getElementById('qv-reviews-count').textContent = `(${product.reviewsCount} reviews)`;
+
+      document.getElementById('qv-crunch-num').textContent = `${product.crunchFactor} / 5.0`;
+      const crunchPct = Math.round((product.crunchFactor / 5) * 100);
+      document.getElementById('qv-crunch-bar').style.width = `${crunchPct}%`;
+
+      document.getElementById('qv-protein').textContent = product.nutrition.protein;
+      document.getElementById('qv-fats').textContent = product.nutrition.healthyFats;
+      document.getElementById('qv-fiber').textContent = product.nutrition.fiber;
+
+      // Tags
+      document.getElementById('qv-tags').innerHTML = product.tags.map(t => `
+        <span class="px-2 py-0.5 rounded bg-earth-100 text-earth-800 text-[10px] font-bold uppercase">${t}</span>
+      `).join('');
+
+      // Weight Selector update
+      updateQuickViewWeightUI();
+
+      const modal = document.getElementById('quick-view-modal');
+      if (modal) modal.classList.remove('hidden');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function setQuickViewWeight(weight) {
+      quickViewSelectedWeight = weight;
+      updateQuickViewWeightUI();
+    }
+
+    function updateQuickViewWeightUI() {
+      if (!activeQuickViewProduct) return;
+      const price = calculatePrice(activeQuickViewProduct, quickViewSelectedWeight);
+      const priceEl = document.getElementById('qv-price');
+      if (priceEl) priceEl.textContent = `₹${price}`;
+
+      document.querySelectorAll('.qv-w-btn').forEach(btn => {
+        if (btn.getAttribute('data-weight') === quickViewSelectedWeight) {
+          btn.className = "qv-w-btn px-2.5 py-1 text-xs font-bold rounded-lg border border-earth-600 bg-earth-500 text-forest-950";
+        } else {
+          btn.className = "qv-w-btn px-2.5 py-1 text-xs font-bold rounded-lg border border-cream-400 bg-cream-200 text-forest-800";
+        }
+      });
+    }
+
+    function addQuickViewToCart(event) {
+      if (!activeQuickViewProduct) return;
+      const price = calculatePrice(activeQuickViewProduct, quickViewSelectedWeight);
+
+      createParticleBurst(event.clientX, event.clientY);
+
+      addToCart({
+        id: `${activeQuickViewProduct.id}-${quickViewSelectedWeight}`,
+        productId: activeQuickViewProduct.id,
+        name: activeQuickViewProduct.name,
+        emoji: activeQuickViewProduct.emoji,
+        weight: quickViewSelectedWeight,
+        price: price,
+        qty: 1
+      });
+
+      showToast(`Added ${activeQuickViewProduct.name} (${quickViewSelectedWeight}) to basket!`, 'success');
+      animateNavbarCart();
+      closeQuickView();
+    }
+
+    function closeQuickView() {
+      const modal = document.getElementById('quick-view-modal');
+      if (modal) modal.classList.add('hidden');
+      activeQuickViewProduct = null;
+    }
+
+
+    /* ==========================================================
+       10. BUILD YOUR OWN SNACK BOX (3 STEPS)
+       ========================================================== */
+    function initBoxBuilder() {
+      const grid = document.getElementById('builder-ingredients-grid');
+      if (!grid) return;
+
+      grid.innerHTML = PRODUCTS.map(prod => `
+        <div 
+          id="box-ing-${prod.id}"
+          onclick="toggleBoxIngredient('${prod.id}')"
+          class="box-ing-card cursor-pointer bg-forest-900/80 hover:bg-forest-800 rounded-2xl p-3.5 border border-forest-700/60 transition-all flex flex-col justify-between relative group select-none"
+        >
+          <div class="flex items-center justify-between">
+            <span class="text-3xl">${prod.emoji}</span>
+            <div id="check-icon-${prod.id}" class="w-6 h-6 rounded-full border border-forest-500 bg-forest-950 flex items-center justify-center text-xs text-transparent transition-colors">
+              ✓
+            </div>
+          </div>
+          <div class="mt-3">
+            <div class="font-serif font-bold text-xs sm:text-sm text-cream-100 group-hover:text-earth-300 transition-colors">${prod.name}</div>
+            <div class="text-[10px] text-cream-400 font-medium">100g portion</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleBoxIngredient(productId) {
+      const prod = PRODUCTS.find(p => p.id === productId);
+      if (!prod) return;
+
+      const idx = selectedBoxIngredients.findIndex(i => i.id === prod.id);
+
+      if (idx > -1) {
+        // Deselect
+        selectedBoxIngredients.splice(idx, 1);
+      } else {
+        // Select (Max 5)
+        if (selectedBoxIngredients.length >= 5) {
+          showToast('Maximum 5 artisan ingredients permitted per box!', 'info');
+          return;
+        }
+        selectedBoxIngredients.push(prod);
+      }
+
+      updateBoxBuilderUI();
+    }
+
+    function updateBoxBuilderUI() {
+      // Update check icons & borders
+      PRODUCTS.forEach(p => {
+        const card = document.getElementById(`box-ing-${p.id}`);
+        const check = document.getElementById(`check-icon-${p.id}`);
+        const isSelected = selectedBoxIngredients.some(i => i.id === p.id);
+
+        if (card && check) {
+          if (isSelected) {
+            card.classList.add('border-earth-400', 'bg-forest-800/90', 'ring-2', 'ring-earth-400/30');
+            check.className = "w-6 h-6 rounded-full bg-earth-500 text-forest-950 font-bold flex items-center justify-center text-xs shadow-glow-gold";
+          } else {
+            card.classList.remove('border-earth-400', 'bg-forest-800/90', 'ring-2', 'ring-earth-400/30');
+            check.className = "w-6 h-6 rounded-full border border-forest-500 bg-forest-950 flex items-center justify-center text-xs text-transparent";
+          }
+        }
+      });
+
+      // Update counter
+      const counter = document.getElementById('builder-selected-counter');
+      if (counter) {
+        counter.textContent = `Selected: ${selectedBoxIngredients.length} / 5`;
+      }
+
+      // Next button in step 2 (requires 3 to 5 items)
+      const step2Next = document.getElementById('step-2-next-btn');
+      if (step2Next) {
+        if (selectedBoxIngredients.length >= 3 && selectedBoxIngredients.length <= 5) {
+          step2Next.disabled = false;
+          step2Next.className = "px-8 py-3.5 rounded-xl bg-earth-500 hover:bg-earth-400 text-forest-950 font-bold text-sm tracking-wide uppercase transition-all shadow-glow-gold hover:scale-105 active:scale-95";
+        } else {
+          step2Next.disabled = true;
+          step2Next.className = "px-8 py-3.5 rounded-xl bg-earth-500/40 text-forest-950 cursor-not-allowed font-bold text-sm tracking-wide uppercase transition-all";
+        }
+      }
+    }
+
+    function setBoxNameSuggestion(name) {
+      const input = document.getElementById('box-custom-name');
+      if (input) input.value = name;
+    }
+
+    function goToBuilderStep(stepNumber) {
+      if (stepNumber === 2) {
+        const nameInput = document.getElementById('box-custom-name');
+        if (nameInput && nameInput.value.trim().length > 0) {
+          boxName = nameInput.value.trim();
+        } else {
+          showToast('Please bestow a name upon your custom snack box!', 'info');
+          return;
+        }
+      }
+
+      if (stepNumber === 3) {
+        if (selectedBoxIngredients.length < 3) {
+          showToast('Please select at least 3 ingredients to build your box.', 'info');
+          return;
+        }
+        renderBoxSummary();
+      }
+
+      builderCurrentStep = stepNumber;
+
+      // Hide all steps, show current
+      document.querySelectorAll('.builder-step').forEach(el => el.classList.add('hidden'));
+      const activeStepEl = document.getElementById(`builder-step-${stepNumber}`);
+      if (activeStepEl) activeStepEl.classList.remove('hidden');
+
+      // Update Step Stepper UI
+      updateStepperUI(stepNumber);
+    }
+
+    function updateStepperUI(activeStep) {
+      for (let s = 1; s <= 3; s++) {
+        const node = document.getElementById(`step-node-${s}`);
+        const line = document.getElementById(`step-line-${s}`);
+
+        if (node) {
+          if (s <= activeStep) {
+            node.className = "w-10 h-10 rounded-full bg-earth-500 text-forest-950 font-bold flex items-center justify-center text-sm shadow-glow-gold transition-colors";
+          } else {
+            node.className = "w-10 h-10 rounded-full bg-forest-800 text-cream-300 font-bold flex items-center justify-center text-sm border border-forest-600 transition-colors";
+          }
+        }
+        if (line) {
+          line.className = s < activeStep ? "flex-1 h-1 bg-earth-500 mx-2 -mt-5 transition-colors" : "flex-1 h-1 bg-forest-700 mx-2 -mt-5 transition-colors";
+        }
+      }
+    }
+
+    function renderBoxSummary() {
+      document.getElementById('summary-box-title').textContent = `"${boxName}"`;
+
+      const listContainer = document.getElementById('summary-ingredients-list');
+      if (!listContainer) return;
+
+      // Calculate totals
+      let ingredientsCost = 0;
+      let totalCalories = 0;
+
+      listContainer.innerHTML = selectedBoxIngredients.map(item => {
+        // 100g portion cost = item.basePrice * 0.45
+        const portionPrice = Math.round(item.basePrice * 0.45);
+        ingredientsCost += portionPrice;
+        totalCalories += (item.caloriesPer50g * 2);
+
+        return `
+          <div class="flex items-center justify-between text-xs text-cream-100 py-1 border-b border-forest-800/60">
+            <span class="flex items-center gap-2">
+              <span class="text-base">${item.emoji}</span>
+              <span class="font-semibold">${item.name}</span>
+            </span>
+            <span class="text-earth-300 font-mono">100g (₹${portionPrice})</span>
+          </div>
+        `;
+      }).join('');
+
+      const boxPackagingCost = 150;
+      const grandBoxTotal = boxPackagingCost + ingredientsCost;
+
+      document.getElementById('summary-ingredients-price').textContent = `₹${ingredientsCost}`;
+      document.getElementById('summary-calories-val').textContent = `~${totalCalories} kcal`;
+      document.getElementById('summary-total-price').textContent = `₹${grandBoxTotal}`;
+    }
+
+    function addCustomBoxToCart(event) {
+      if (selectedBoxIngredients.length < 3) return;
+
+      createParticleBurst(event.clientX, event.clientY);
+
+      let ingredientsCost = 0;
+      selectedBoxIngredients.forEach(item => {
+        ingredientsCost += Math.round(item.basePrice * 0.45);
+      });
+      const grandBoxTotal = 150 + ingredientsCost;
+      const ingredientNames = selectedBoxIngredients.map(i => i.name).join(', ');
+
+      addToCart({
+        id: `custom-box-${Date.now()}`,
+        name: `Custom Box: "${boxName}"`,
+        emoji: '🎁',
+        weight: `${selectedBoxIngredients.length * 100}g Box`,
+        price: grandBoxTotal,
+        qty: 1
+      });
+
+      showToast(`"${boxName}" added to basket!`, 'success');
+      animateNavbarCart();
+
+      // Reset and open cart
+      setTimeout(() => {
+        openCartDrawer();
+        goToBuilderStep(1);
+        selectedBoxIngredients = [];
+        updateBoxBuilderUI();
+      }, 500);
+    }
+
+
+    /* ==========================================================
+       11. REVIEWS CAROUSEL
+       ========================================================== */
+    function renderReviewSlide(index) {
+      const review = REVIEWS[index];
+      const container = document.getElementById('carousel-slide-content');
+      const dotsContainer = document.getElementById('carousel-dots');
+      if (!container || !review) return;
+
+      container.style.opacity = 0;
+
+      setTimeout(() => {
+        container.innerHTML = `
+          <div class="space-y-4">
+            <div class="flex items-center gap-1 text-amber-500 text-lg">
+              ${'★'.repeat(review.rating)}
+            </div>
+            <p class="font-serif italic text-lg sm:text-xl text-forest-900 leading-relaxed max-w-3xl">
+              "${review.text}"
+            </p>
+          </div>
+
+          <div class="flex items-center gap-4 mt-6">
+            <div class="w-12 h-12 rounded-full bg-cream-200 border border-earth-600/30 flex items-center justify-center text-2xl shadow-sm">
+              ${review.avatar}
+            </div>
+            <div>
+              <div class="font-serif font-bold text-forest-950 text-base">${review.name}</div>
+              <div class="text-xs text-forest-700 font-medium">${review.role}</div>
+            </div>
+          </div>
+        `;
+
+        // Render Dots
+        if (dotsContainer) {
+          dotsContainer.innerHTML = REVIEWS.map((_, i) => `
+            <button 
+              onclick="goToReview(${i})" 
+              class="w-2.5 h-2.5 rounded-full transition-all duration-300 ${i === index ? 'w-8 bg-forest-800' : 'bg-earth-300 hover:bg-earth-400'}"
+              aria-label="Go to slide ${i + 1}"
+            ></button>
+          `).join('');
+        }
+
+        container.style.opacity = 1;
+      }, 200);
+    }
+
+    function nextReview() {
+      currentReviewIndex = (currentReviewIndex + 1) % REVIEWS.length;
+      renderReviewSlide(currentReviewIndex);
+    }
+
+    function prevReview() {
+      currentReviewIndex = (currentReviewIndex - 1 + REVIEWS.length) % REVIEWS.length;
+      renderReviewSlide(currentReviewIndex);
+    }
+
+    function goToReview(index) {
+      currentReviewIndex = index;
+      renderReviewSlide(currentReviewIndex);
+    }
+
+    function startReviewAutoPlay() {
+      stopReviewAutoPlay();
+      reviewTimer = setInterval(nextReview, 4000);
+    }
+
+    function stopReviewAutoPlay() {
+      if (reviewTimer) clearInterval(reviewTimer);
+    }
+
+
+    /* ==========================================================
+       12. CHECKOUT & ORDER CONFIRMATION
+       ========================================================== */
+    function openCheckoutModal() {
+      if (cart.length === 0) {
+        showToast('Your basket is empty!', 'info');
+        return;
+      }
+      closeCartDrawer();
+      const modal = document.getElementById('checkout-modal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeCheckoutModal() {
+      const modal = document.getElementById('checkout-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function handlePlaceOrder(event) {
+      event.preventDefault();
+      const name = document.getElementById('order-name').value;
+      const email = document.getElementById('order-email').value;
+      const address = document.getElementById('order-address').value;
+
+      const btn = document.getElementById('place-order-btn');
+      const text = document.getElementById('place-order-text');
+      const spinner = document.getElementById('place-order-spinner');
+
+      btn.disabled = true;
+      text.textContent = 'Processing Payment & Reservation...';
+      spinner.classList.remove('hidden');
+
+      // 2 Seconds simulated network processing
+      setTimeout(() => {
+        btn.disabled = false;
+        text.textContent = 'Place Harvest Order';
+        spinner.classList.add('hidden');
+
+        closeCheckoutModal();
+        triggerOrderSuccess(name, email, address);
+      }, 2000);
+    }
+
+    function triggerOrderSuccess(name, email, address) {
+      const orderRef = `TN-${Math.floor(10000 + Math.random() * 90000)}`;
+      document.getElementById('success-order-id').textContent = orderRef;
+      document.getElementById('receipt-customer-name').textContent = name;
+
+      const dateStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      document.getElementById('receipt-date').textContent = dateStr;
+
+      // Populate Receipt Items
+      const receiptList = document.getElementById('receipt-items-list');
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      const discount = isPromoApplied ? Math.round(subtotal * 0.1) : 0;
+      const shipping = subtotal >= 999 ? 0 : 80;
+      const grandTotal = Math.max(0, subtotal - discount + shipping);
+
+      if (receiptList) {
+        receiptList.innerHTML = cart.map(item => `
+          <div class="flex justify-between items-center py-0.5">
+            <span>${item.qty}x ${item.name} (${item.weight})</span>
+            <span class="font-mono">₹${item.price * item.qty}</span>
+          </div>
+        `).join('');
+
+        if (discount > 0) {
+          receiptList.innerHTML += `
+            <div class="flex justify-between text-emerald-700 font-semibold py-0.5">
+              <span>Promo TERRA10 (10%)</span>
+              <span>-₹${discount}</span>
+            </div>
+          `;
+        }
+      }
+
+      document.getElementById('receipt-total-amount').textContent = `₹${grandTotal}`;
+
+      // Dispatch Real Order Confirmation Email to Customer
+      const orderSummaryText = cart.map(item => `${item.qty}x ${item.name} (${item.weight}) - ₹${item.price * item.qty}`).join(', ');
+      sendRealEmail('order', {
+        to_name: name,
+        to_email: email,
+        order_id: orderRef,
+        order_date: dateStr,
+        order_items: orderSummaryText,
+        delivery_address: address,
+        total_amount: `₹${grandTotal}`,
+        support_email: 'meiofthemist@gmail.com'
+      });
+
+      // Show Order Success Modal
+      const modal = document.getElementById('order-success-modal');
+      if (modal) modal.classList.remove('hidden');
+
+      // Confetti Shower with multiple bursts
+      fireConfettiShower();
+
+      // Show confirmation toast
+      showToast(`Confirmation & invoice receipt sent to ${email}!`, 'success');
+
+      // Clear Cart
+      cart = [];
+      isPromoApplied = false;
+      renderCart();
+    }
+
+    function fireConfettiShower() {
+      if (typeof confetti === 'function') {
+        const count = 200;
+        const defaults = {
+          origin: { y: 0.7 },
+          colors: ['#2d5a3d', '#c4a265', '#8b6914', '#1a3a2a', '#eedfbe']
+        };
+
+        function fire(particleRatio, opts) {
+          confetti({
+            ...defaults,
+            ...opts,
+            particleCount: Math.floor(count * particleRatio)
+          });
+        }
+
+        fire(0.25, { spread: 26, startVelocity: 55 });
+        fire(0.2, { spread: 60 });
+        fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+        fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+        fire(0.1, { spread: 120, startVelocity: 45 });
+      }
+    }
+
+    function closeOrderSuccessModal() {
+      const modal = document.getElementById('order-success-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function openNewsletterWelcomeModal(email) {
+      const emailEl = document.getElementById('welcome-modal-email');
+      if (emailEl) emailEl.textContent = email;
+
+      const modal = document.getElementById('newsletter-welcome-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    function closeNewsletterWelcomeModal() {
+      const modal = document.getElementById('newsletter-welcome-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+
+    /* ==========================================================
+       13. NEWSLETTER, CONTACT & MOBILE NAV
+       ========================================================== */
+    function handleNewsletterSubmit(event) {
+      event.preventDefault();
+      const input = document.getElementById('newsletter-email');
+      const btn = document.getElementById('newsletter-btn');
+      if (!input || !input.value) return;
+
+      const subscriberEmail = input.value;
+
+      // Realistic button loading state
+      const originalHTML = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `
+          <svg class="animate-spin h-4 w-4 text-forest-950" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+          </svg>
+          <span>Sending Welcome Gift...</span>
+        `;
+      }
+
+      // Console logging dispatch verification
+      console.log('--- NEWSLETTER SUBSCRIPTION ---');
+      console.log('Recipient Address (Sending Greeting To):', subscriberEmail);
+      console.log('Brand From Sender: meiofthemist@gmail.com (Terra Natura Atelier)');
+      console.log('Dispatched Promo: TERRA15 (15% First Harvest Discount)');
+
+      setTimeout(async () => {
+        // Dispatch real email via EmailJS (optimized parameter names for high deliverability)
+        await sendRealEmail('newsletter', {
+          to_email: subscriberEmail,
+          email: subscriberEmail,
+          to_name: subscriberEmail.split('@')[0],
+          name: subscriberEmail.split('@')[0],
+          promo_code: 'TERRA15',
+          discount: '15%',
+          sender_name: 'Terra Natura Provisions',
+          from_name: 'Terra Natura Atelier',
+          support_email: 'meiofthemist@gmail.com'
+        });
+
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalHTML;
+        }
+
+        // Trigger celebratory confetti shower
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 75,
+            spread: 70,
+            origin: { y: 0.75 }
+          });
+        }
+
+        showToast(`Welcome to the Terra Circle! Greeting & discount sent to ${subscriberEmail}.`, 'success');
+        input.value = '';
+
+        // Open Interactive Simulated Welcome Email Modal
+        openNewsletterWelcomeModal(subscriberEmail);
+      }, 1000);
+    }
+
+    function handleContactSubmit(event) {
+      event.preventDefault();
+      const name = document.getElementById('contact-name')?.value || 'Guest';
+      const email = document.getElementById('contact-email')?.value || '';
+      const phone = document.getElementById('contact-phone')?.value || 'Not provided';
+      const subject = document.getElementById('contact-subject')?.value || 'General Inquiry';
+      const message = document.getElementById('contact-message')?.value || '';
+      const btn = document.getElementById('contact-submit-btn');
+
+      if (!btn) return;
+
+      // Realistic frontend loading feedback
+      const originalHTML = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = `
+        <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-earth-300" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+        </svg>
+        <span>Transmitting to meiofthemist@gmail.com...</span>
+      `;
+
+      // Log dispatch payload for debugging/inspection
+      console.log('--- INQUIRY DISPATCH ---');
+      console.log('Destination Inbox: meiofthemist@gmail.com');
+      console.log('Customer Details:', { name, email, phone, subject, message });
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
+
+        // Reset form
+        document.getElementById('contact-inquiry-form')?.reset();
+
+        // Particle burst confirmation
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 55,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0.6, y: 0.7 }
+          });
+        }
+
+        showToast(`Inquiry dispatched to meiofthemist@gmail.com! Thank you, ${name}. We will get back to ${email} shortly.`, 'success');
+      }, 1200);
+    }
+
+    function toggleMobileNav() {
+      const nav = document.getElementById('mobile-nav');
+      if (nav) nav.classList.toggle('hidden');
+    }
+
+
+    /* ==========================================================
+       14. GSAP & PARALLAX ANIMATIONS
+       ========================================================== */
+    function initHeroParallax() {
+      const hero = document.getElementById('hero');
+      const elements = document.querySelectorAll('.parallax-seed');
+
+      if (hero && elements.length > 0) {
+        window.addEventListener('mousemove', (e) => {
+          const { clientX, clientY } = e;
+          const xPos = (clientX / window.innerWidth - 0.5) * 40;
+          const yPos = (clientY / window.innerHeight - 0.5) * 40;
+
+          elements.forEach((el, index) => {
+            const factor = (index + 1) * 0.4;
+            gsap.to(el, {
+              x: xPos * factor,
+              y: yPos * factor,
+              duration: 1.2,
+              ease: 'power1.out'
+            });
+          });
+        });
+      }
+    }
+
+    function initGSAPAnimations() {
+      // Safe animation without leaving elements hidden if scroll trigger doesn't immediately fire
+      if (typeof gsap !== 'undefined') {
+        const cards = document.querySelectorAll('.health-card');
+        if (cards.length > 0) {
+          gsap.fromTo(cards, 
+            { opacity: 0.6, y: 15 }, 
+            { opacity: 1, y: 0, stagger: 0.08, duration: 0.6, ease: 'power2.out' }
+          );
+        }
+      }
+    }
+  </script>
+</body>
+</html>
